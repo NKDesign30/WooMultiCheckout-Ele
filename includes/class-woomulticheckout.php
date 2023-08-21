@@ -39,16 +39,16 @@ class WooMultiCheckout_Widget extends Widget_Base
 
         switch ($current_step) {
             case 1:
-                $template_path = plugin_dir_path(__FILE__) . 'templates/step1-shipping.php';
+                $template_path = plugin_dir_path(dirname(__FILE__)) . 'templates/step1-shipping.php';
                 break;
             case 2:
-                $template_path = plugin_dir_path(__FILE__) . 'templates/step2-payment.php';
+                $template_path = plugin_dir_path(dirname(__FILE__)) . 'templates/step2-payment.php';
                 break;
             case 3:
-                $template_path = plugin_dir_path(__FILE__) . 'templates/step3-review.php';
+                $template_path = plugin_dir_path(dirname(__FILE__)) . 'templates/step3-review.php';
                 break;
             default:
-                $template_path = plugin_dir_path(__FILE__) . 'templates/step1-shipping.php';
+                $template_path = plugin_dir_path(dirname(__FILE__)) . 'templates/step1-shipping.php';
                 break;
         }
 
