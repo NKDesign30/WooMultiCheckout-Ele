@@ -1,8 +1,4 @@
 <?php
-// Exit if accessed directly
-if (!defined('ABSPATH')) {
-    exit;
-}
 
 class WooMultiCheckout extends \Elementor\Widget_Base {
 
@@ -15,11 +11,11 @@ class WooMultiCheckout extends \Elementor\Widget_Base {
     }
 
     public function get_icon() {
-        return 'eicon-woocommerce';
+        return 'fa fa-code';
     }
 
     public function get_categories() {
-        return ['woocommerce'];
+        return ['general'];
     }
 
     protected function _register_controls() {
@@ -37,3 +33,6 @@ class WooMultiCheckout extends \Elementor\Widget_Base {
     }
 }
 
+add_action('elementor/widgets/widgets_registered', function($widgets_manager) {
+    $widgets_manager->register_widget_type(new WooMultiCheckout());
+});
