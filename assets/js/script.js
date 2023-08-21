@@ -8,22 +8,34 @@ jQuery(document).ready(function($) {
     // Apply coupon code
     $('#wmc-apply-coupon').on('click', function() {
         var couponCode = $('#wmc-coupon-code').val();
-        // Send AJAX request to apply the coupon code
+        $.ajax({
+            url: wmc_params.ajax_url,
+            type: 'POST',
+            data: {
+                action: 'wmc_apply_coupon',
+                coupon_code: couponCode
+            },
+            success: function(response) {
+                // Handle the response here
+            }
+        });
     });
 
     // Place the order
     $('#wmc-place-order').on('click', function() {
         var shippingForm = $('#wmc-shipping-form').serialize();
         var paymentForm = $('#wmc-payment-form').serialize();
-        // Send AJAX request to place the order
-    });
-
-    // Validate the inputs
-    $('input, select').on('blur', function() {
-        if ($(this).val() === '') {
-            $(this).addClass('wmc-error');
-        } else {
-            $(this).removeClass('wmc-error');
-        }
+        $.ajax({
+            url: wmc_params.ajax_url,
+            type: 'POST',
+            data: {
+                action: 'wmc_place_order',
+                shipping_info: shippingForm,
+                payment_info: paymentForm
+            },
+            success: function(response) {
+                // Handle the response here
+            }
+        });
     });
 });
