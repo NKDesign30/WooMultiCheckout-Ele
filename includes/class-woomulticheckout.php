@@ -1,13 +1,13 @@
 <?php
-
-namespace WooMultiCheckout;
+if (!defined('ABSPATH')) {
+    exit; // Exit if accessed directly.
+}
 
 use Elementor\Widget_Base;
 use Elementor\Controls_Manager;
 
-class WooMultiCheckout extends Widget_Base
+class WooMultiCheckout_Widget extends Widget_Base
 {
-
     public function get_name()
     {
         return 'woomulticheckout';
@@ -15,7 +15,7 @@ class WooMultiCheckout extends Widget_Base
 
     public function get_title()
     {
-        return 'WooCommerce MultiStep Checkout';
+        return __('WooCommerce MultiStep Checkout', 'woomulticheckout');
     }
 
     public function get_icon()
@@ -30,11 +30,11 @@ class WooMultiCheckout extends Widget_Base
 
     protected function _register_controls()
     {
-        // Add your controls here
+        // Add your controls here.
     }
 
     protected function render()
     {
-        // Add your HTML and JavaScript code here
+        // Add your rendering code here.
     }
 }

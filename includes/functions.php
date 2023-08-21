@@ -4,12 +4,14 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-function wmc_apply_coupon_code($coupon_code) {
+function wmc_apply_coupon_code($coupon_code)
+{
     // Use WooCommerce functions to apply the coupon code
     WC()->cart->add_discount(sanitize_text_field($coupon_code));
 }
 
-function wmc_process_checkout($shipping_info, $payment_info) {
+function wmc_process_checkout($shipping_info, $payment_info)
+{
     // Create a new order in WooCommerce
     $order = wc_create_order();
 
@@ -49,7 +51,8 @@ function wmc_process_checkout($shipping_info, $payment_info) {
 add_action('wp_ajax_wmc_apply_coupon', 'wmc_ajax_apply_coupon');
 add_action('wp_ajax_nopriv_wmc_apply_coupon', 'wmc_ajax_apply_coupon');
 
-function wmc_ajax_apply_coupon() {
+function wmc_ajax_apply_coupon()
+{
     $coupon_code = $_POST['coupon_code'];
     wmc_apply_coupon_code($coupon_code);
     wp_send_json_success();
@@ -59,13 +62,15 @@ function wmc_ajax_apply_coupon() {
 add_action('wp_ajax_wmc_place_order', 'wmc_ajax_place_order');
 add_action('wp_ajax_nopriv_wmc_place_order', 'wmc_ajax_place_order');
 
-function wmc_ajax_place_order() {
+function wmc_ajax_place_order()
+{
     parse_str($_POST['shipping_info'], $shipping_info);
     parse_str($_POST['payment_info'], $payment_info);
     $order_id = wmc_place_order($shipping_info, $payment_info);
     wp_send_json_success(['order_id' => $order_id]);
 }
-function wmc_get_payment_methods() {
+function wmc_get_payment_methods()
+{
     $available_gateways = WC()->payment_gateways->get_available_payment_gateways();
     $payment_methods = [];
     foreach ($available_gateways as $gateway) {
@@ -77,7 +82,8 @@ function wmc_get_payment_methods() {
     return $payment_methods;
 }
 
-function wmc_get_countries() {
+function wmc_get_countries()
+{
     $countries = WC()->countries->get_countries();
     return $countries;
 }
