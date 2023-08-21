@@ -35,9 +35,16 @@ class WooMultiCheckout_Widget extends Widget_Base
 
     protected function render()
     {
-        echo '<div class="woomulticheckout-widget">';
-        echo '<h2>WooCommerce MultiStep Checkout</h2>';
-        echo '<p>This is a placeholder for the WooCommerce MultiStep Checkout widget.</p>';
-        echo '</div>';
+        // Pfad zur Vorlagendatei
+        $template_path = plugin_dir_path(__FILE__) . 'templates/step1-shipping.php';
+
+        // Überprüfen Sie, ob die Vorlagendatei existiert
+        if (file_exists($template_path)) {
+            // Laden Sie die Vorlagendatei
+            include $template_path;
+        } else {
+            // Fehlermeldung anzeigen, wenn die Vorlagendatei nicht gefunden wird
+            echo 'Vorlagendatei nicht gefunden: ' . $template_path;
+        }
     }
 }
