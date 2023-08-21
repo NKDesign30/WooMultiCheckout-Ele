@@ -29,12 +29,16 @@ jQuery(document).ready(function($) {
             url: wmc_params.ajax_url,
             type: 'POST',
             data: {
-                action: 'wmc_place_order',
+                action: 'wmc_process_checkout',
                 shipping_info: shippingForm,
                 payment_info: paymentForm
             },
             success: function(response) {
-                // Handle the response here
+                if (response.success) {
+                    window.location.href = response.data.redirect;
+                } else {
+                    // Handle the error
+                }
             }
         });
     });
