@@ -54,3 +54,19 @@ function wmc_ajax_place_order() {
     $order_id = wmc_place_order($shipping_info, $payment_info);
     wp_send_json_success(['order_id' => $order_id]);
 }
+function wmc_get_payment_methods() {
+    $available_gateways = WC()->payment_gateways->get_available_payment_gateways();
+    $payment_methods = [];
+    foreach ($available_gateways as $gateway) {
+        $payment_methods[] = [
+            'id' => $gateway->id,
+            'title' => $gateway->title
+        ];
+    }
+    return $payment_methods;
+}
+
+function wmc_get_countries() {
+    $countries = WC()->countries->get_countries();
+    return $countries;
+}
