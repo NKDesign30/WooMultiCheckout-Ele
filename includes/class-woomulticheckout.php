@@ -36,7 +36,7 @@ class WooMultiCheckout_Widget extends Widget_Base
     protected function render()
     {
         // Pfad zur Vorlagendatei
-        $template_path = plugin_dir_path(__FILE__) . 'templates/step1-shipping.php';
+        $template_path = plugin_dir_path(dirname(__FILE__)) . 'templates/step1-shipping.php';
 
         // Überprüfen Sie, ob die Vorlagendatei existiert
         if (file_exists($template_path)) {
