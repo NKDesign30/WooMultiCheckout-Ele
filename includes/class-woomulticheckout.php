@@ -35,15 +35,26 @@ class WooMultiCheckout_Widget extends Widget_Base
 
     protected function render()
     {
-        // Pfad zur Vorlagendatei
-        $template_path = plugin_dir_path(dirname(__FILE__)) . 'templates/step1-shipping.php';
+        $current_step = isset($_GET['step']) ? intval($_GET['step']) : 1;
 
-        // Überprüfen Sie, ob die Vorlagendatei existiert
+        switch ($current_step) {
+            case 1:
+                $template_path = plugin_dir_path(__FILE__) . 'templates/step1-shipping.php';
+                break;
+            case 2:
+                $template_path = plugin_dir_path(__FILE__) . 'templates/step2-payment.php';
+                break;
+            case 3:
+                $template_path = plugin_dir_path(__FILE__) . 'templates/step3-review.php';
+                break;
+            default:
+                $template_path = plugin_dir_path(__FILE__) . 'templates/step1-shipping.php';
+                break;
+        }
+
         if (file_exists($template_path)) {
-            // Laden Sie die Vorlagendatei
             include $template_path;
         } else {
-            // Fehlermeldung anzeigen, wenn die Vorlagendatei nicht gefunden wird
             echo 'Vorlagendatei nicht gefunden: ' . $template_path;
         }
     }

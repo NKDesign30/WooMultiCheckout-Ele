@@ -1,22 +1,23 @@
-<div class="wmc-step wmc-step2">
-    <h2><?php _e('Schritt 2: Zahlung', 'woomulticheckout'); ?></h2>
-    <form id="wmc-payment-form">
-        <div class="wmc-field">
-    <label><?php _e('Zahlungsmethode', 'woomulticheckout'); ?></label>
-    <select id="wmc-payment-method" name="payment_method" required>
+<div class="step2-payment">
+    <h2>Zahlung</h2>
+    <p>Bitte wählen Sie Ihre bevorzugte Zahlungsmethode aus:</p>
+    <form id="payment-form" method="post">
         <?php
-        $payment_methods = wmc_get_payment_methods();
-        foreach ($payment_methods as $method) {
-            echo '<option value="' . esc_attr($method['id']) . '">' . esc_html($method['title']) . '</option>';
+        // Get available payment gateways
+        $available_gateways = WC()->payment_gateways->get_available_payment_gateways();
+        if (!empty($available_gateways)) {
+            foreach ($available_gateways as $gateway) {
+                echo '<div class="payment-option">';
+                echo '<input type="radio" name="payment_method" value="' . esc_attr($gateway->id) . '" id="payment_method_' . esc_attr($gateway->id) . '">';
+                echo '<label for="payment_method_' . esc_attr($gateway->id) . '">' . esc_html($gateway->get_title()) . '</label>';
+                echo '</div>';
+            }
         }
         ?>
-    </select>
-</div>
-        <div class="wmc-field">
-            <label for="wmc-coupon-code"><?php _e('Gutscheincode', 'woomulticheckout'); ?></label>
-            <input type="text" id="wmc-coupon-code" name="coupon_code">
-            <button type="button" id="wmc-apply-coupon"><?php _e('Gutschein anwenden', 'woomulticheckout'); ?></button>
+        <div class="coupon-field">
+            <label for="coupon_code">Gutscheincode:</label>
+            <input type="text" name="coupon_code" id="coupon_code" placeholder="Gutscheincode eingeben">
+            <button type="submit" name="apply_coupon" value="Gutschein anwenden">Gutschein anwenden</button>
         </div>
-        <button type="button" id="wmc-next-step"><?php _e('Weiter', 'woomulticheckout'); ?></button>
     </form>
 </div>
