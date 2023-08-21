@@ -22,3 +22,26 @@
     </div>
     <button type="button" id="wmc-place-order"><?php _e('Jetzt bestellen', 'woomulticheckout'); ?></button>
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Get the selected payment method from step 2
+        var paymentMethod = document.querySelector('input[name="payment_method"]:checked').value;
+        document.getElementById('wmc-review-payment-method').textContent = paymentMethod;
+
+        // Get the applied coupon code from step 2
+        var couponCode = document.getElementById('coupon_code').value;
+        document.getElementById('wmc-review-coupon-code').textContent = couponCode;
+
+        // Get the shipping address from step 1
+        var shippingAddress = document.getElementById('shipping_address').value;
+        document.getElementById('wmc-review-shipping-address').textContent = shippingAddress;
+
+        // Get the billing address from step 1
+        var billingAddress = document.getElementById('billing_address').value;
+        document.getElementById('wmc-review-billing-address').textContent = billingAddress;
+
+        // Get the order details from the cart
+        var orderDetails = document.getElementById('order_details').innerHTML;
+        document.getElementById('wmc-review-order').innerHTML = orderDetails;
+    });
+</script>
