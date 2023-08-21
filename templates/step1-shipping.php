@@ -21,7 +21,6 @@
         <button id="next-step">Weiter</button>
     </form>
 </div>
-Hallo ChatGPT
 <script>
     jQuery(document).ready(function($) {
         $('#next-step').on('click', function(e) {
