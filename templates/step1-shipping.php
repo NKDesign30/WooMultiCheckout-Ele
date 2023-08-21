@@ -21,12 +21,17 @@
             <label for="wmc-postcode"><?php _e('PLZ', 'woomulticheckout'); ?></label>
             <input type="text" id="wmc-postcode" name="postcode" required>
         </div>
-        <div class="wmc-field">
-            <label for="wmc-country"><?php _e('Land', 'woomulticheckout'); ?></label>
-            <select id="wmc-country" name="country" required>
-                <!-- Add options for countries here -->
-            </select>
-        </div>
+<div class="wmc-field">
+    <label for="wmc-country"><?php _e('Land', 'woomulticheckout'); ?></label>
+    <select id="wmc-country" name="country" required>
+        <?php
+        $countries = wmc_get_countries();
+        foreach ($countries as $code => $name) {
+            echo '<option value="' . esc_attr($code) . '">' . esc_html($name) . '</option>';
+        }
+        ?>
+    </select>
+</div>
         <div class="wmc-field">
             <label for="wmc-phone"><?php _e('Telefon', 'woomulticheckout'); ?></label>
             <input type="tel" id="wmc-phone" name="phone" required>
