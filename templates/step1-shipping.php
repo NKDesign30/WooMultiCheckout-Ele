@@ -21,6 +21,7 @@
         <button id="next-step">Weiter</button>
     </form>
 </div>
+
 <script>
     document.getElementById('next-step').addEventListener('click', function() {
         var firstName = document.getElementById('first-name').value;

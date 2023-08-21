@@ -25,11 +25,14 @@
 </div>
 
 <script>
-    document.getElementById('next-step').addEventListener('click', function() {
-        var paymentMethod = document.querySelector('input[name="payment_method"]:checked').value;
-        localStorage.setItem('paymentMethod', paymentMethod);
+    document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('next-step').addEventListener('click', function() {
+            console.log('Button clicked');
+            var paymentMethod = document.querySelector('input[name="payment_method"]:checked').value;
+            localStorage.setItem('paymentMethod', paymentMethod);
 
-        var couponCode = document.getElementById('coupon_code').value;
-        localStorage.setItem('couponCode', couponCode);
+            var couponCode = document.getElementById('coupon_code').value;
+            localStorage.setItem('couponCode', couponCode);
+        });
     });
 </script>
