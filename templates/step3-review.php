@@ -41,7 +41,8 @@
         document.getElementById('wmc-review-billing-address').textContent = billingAddress;
 
         // Get the order details from the cart
-        var orderDetails = document.getElementById('order_details').innerHTML;
-        document.getElementById('wmc-review-order').innerHTML = orderDetails;
+        // Note: You may need to implement this part depending on how you store and display the order details
+        // var orderDetails = ...;
+        // document.getElementById('wmc-review-order').innerHTML = orderDetails;
     });
 </script>
