@@ -9,7 +9,7 @@ function wmc_apply_coupon_code($coupon_code) {
     WC()->cart->add_discount(sanitize_text_field($coupon_code));
 }
 
-function wmc_place_order($shipping_info, $payment_info) {
+function wmc_process_checkout($shipping_info, $payment_info) {
     // Create a new order in WooCommerce
     $order = wc_create_order();
 
@@ -29,10 +29,21 @@ function wmc_place_order($shipping_info, $payment_info) {
     $order->calculate_totals();
     $order->save();
 
-    // Empty the cart
-    WC()->cart->empty_cart();
+    // Process the payment
+    $payment_gateway = wc_get_payment_gateway_by_order($order);
+    $result = $payment_gateway->process_payment($order->get_id());
 
-    return $order->get_id();
+    // Check if the payment was successful
+    if ($result['result'] === 'success') {
+        // Empty the cart
+        WC()->cart->empty_cart();
+
+        // Redirect to the thank you page
+        return $result['redirect'];
+    } else {
+        // Handle the payment error
+        return false;
+    }
 }
 // Handle the AJAX request to apply the coupon code
 add_action('wp_ajax_wmc_apply_coupon', 'wmc_ajax_apply_coupon');
