@@ -18,3 +18,9 @@ define('WOOMULTICHECKOUT_PLUGIN_URL', plugin_dir_url(__FILE__));
 
 // Include the main plugin class.
 require_once WOOMULTICHECKOUT_PLUGIN_DIR . 'plugin.php';
+
+function enqueue_woomulticheckout_styles()
+{
+    wp_enqueue_style('woomulticheckout-styles', plugin_dir_url(__FILE__) . 'assets/css/style.css');
+}
+add_action('wp_enqueue_scripts', 'enqueue_woomulticheckout_styles');
