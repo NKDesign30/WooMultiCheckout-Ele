@@ -25,33 +25,11 @@
 </div>
 
 <script>
-    jQuery(document).ready(function($) {
-        $('#next-step').on('click', function(e) {
-            e.preventDefault();
-            var currentStep = parseInt($('#current-step').val());
-            var nextStep = currentStep + 1;
-            var url = window.location.href;
-            var newUrl = updateUrlParameter(url, 'step', nextStep);
-            window.location.href = newUrl;
-        });
+    document.getElementById('next-step').addEventListener('click', function() {
+        var paymentMethod = document.querySelector('input[name="payment_method"]:checked').value;
+        localStorage.setItem('paymentMethod', paymentMethod);
 
-        function updateUrlParameter(url, param, paramVal) {
-            var newAdditionalURL = "";
-            var tempArray = url.split("?");
-            var baseURL = tempArray[0];
-            var additionalURL = tempArray[1];
-            var temp = "";
-            if (additionalURL) {
-                tempArray = additionalURL.split("&");
-                for (var i = 0; i < tempArray.length; i++) {
-                    if (tempArray[i].split('=')[0] != param) {
-                        newAdditionalURL += temp + tempArray[i];
-                        temp = "&";
-                    }
-                }
-            }
-            var rows_txt = temp + "" + param + "=" + paramVal;
-            return baseURL + "?" + newAdditionalURL + rows_txt;
-        }
+        var couponCode = document.getElementById('coupon_code').value;
+        localStorage.setItem('couponCode', couponCode);
     });
 </script>
