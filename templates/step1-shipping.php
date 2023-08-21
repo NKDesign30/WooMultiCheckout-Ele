@@ -1,45 +1,43 @@
-<div class="wmc-step wmc-step1">
-    <h2><?php _e('Schritt 1: Versand', 'woomulticheckout'); ?></h2>
-    <form id="wmc-shipping-form">
-        <div class="wmc-field">
-            <label for="wmc-first-name"><?php _e('Vorname', 'woomulticheckout'); ?></label>
-            <input type="text" id="wmc-first-name" name="first_name" required>
+<div class="checkout-step checkout-step1">
+    <h2>Versand</h2>
+    <form id="shipping-form">
+        <div class="form-group">
+            <label for="first-name">Vorname</label>
+            <input type="text" id="first-name" name="first-name" required>
         </div>
-        <div class="wmc-field">
-            <label for="wmc-last-name"><?php _e('Nachname', 'woomulticheckout'); ?></label>
-            <input type="text" id="wmc-last-name" name="last_name" required>
+        <div class="form-group">
+            <label for="last-name">Nachname</label>
+            <input type="text" id="last-name" name="last-name" required>
         </div>
-        <div class="wmc-field">
-            <label for="wmc-address"><?php _e('Adresse', 'woomulticheckout'); ?></label>
-            <input type="text" id="wmc-address" name="address" required>
+        <div class="form-group">
+            <label for="street">Straße und Hausnummer</label>
+            <input type="text" id="street" name="street" required>
         </div>
-        <div class="wmc-field">
-            <label for="wmc-city"><?php _e('Stadt', 'woomulticheckout'); ?></label>
-            <input type="text" id="wmc-city" name="city" required>
+        <div class="form-group">
+            <label for="postcode">Postleitzahl</label>
+            <input type="text" id="postcode" name="postcode" required>
         </div>
-        <div class="wmc-field">
-            <label for="wmc-postcode"><?php _e('PLZ', 'woomulticheckout'); ?></label>
-            <input type="text" id="wmc-postcode" name="postcode" required>
+        <div class="form-group">
+            <label for="city">Stadt</label>
+            <input type="text" id="city" name="city" required>
         </div>
-<div class="wmc-field">
-    <label for="wmc-country"><?php _e('Land', 'woomulticheckout'); ?></label>
-    <select id="wmc-country" name="country" required>
-        <?php
-        $countries = wmc_get_countries();
-        foreach ($countries as $code => $name) {
-            echo '<option value="' . esc_attr($code) . '">' . esc_html($name) . '</option>';
-        }
-        ?>
-    </select>
-</div>
-        <div class="wmc-field">
-            <label for="wmc-phone"><?php _e('Telefon', 'woomulticheckout'); ?></label>
-            <input type="tel" id="wmc-phone" name="phone" required>
+        <div class="form-group">
+            <label for="country">Land</label>
+            <select id="country" name="country" required>
+                <option value="de">Deutschland</option>
+                <option value="at">Österreich</option>
+                <option value="ch">Schweiz</option>
+                <!-- Add more countries as needed -->
+            </select>
         </div>
-        <div class="wmc-field">
-            <label for="wmc-email"><?php _e('E-Mail', 'woomulticheckout'); ?></label>
-            <input type="email" id="wmc-email" name="email" required>
+        <div class="form-group">
+            <label for="phone">Telefonnummer</label>
+            <input type="tel" id="phone" name="phone" required>
         </div>
-        <button type="button" id="wmc-next-step"><?php _e('Weiter', 'woomulticheckout'); ?></button>
+        <div class="form-group">
+            <label for="email">E-Mail-Adresse</label>
+            <input type="email" id="email" name="email" required>
+        </div>
+        <button type="submit" class="btn-next">Weiter</button>
     </form>
 </div>
