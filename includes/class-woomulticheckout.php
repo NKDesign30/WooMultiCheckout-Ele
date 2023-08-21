@@ -1,28 +1,38 @@
 <?php
 
-class WooMultiCheckout extends \Elementor\Widget_Base {
+use Elementor\Widget_Base;
+use Elementor\Controls_Manager;
 
-    public function get_name() {
+class WooMultiCheckout extends Widget_Base
+{
+
+    public function get_name()
+    {
         return 'woomulticheckout';
     }
 
-    public function get_title() {
+    public function get_title()
+    {
         return __('WooCommerce Multistep Checkout', 'woomulticheckout');
     }
 
-    public function get_icon() {
+    public function get_icon()
+    {
         return 'fa fa-code';
     }
 
-    public function get_categories() {
+    public function get_categories()
+    {
         return ['general'];
     }
 
-    protected function _register_controls() {
+    protected function _register_controls()
+    {
         // Add widget controls here (e.g., color picker, text input, etc.)
     }
 
-    protected function render() {
+    protected function render()
+    {
         // Render the widget on the page
         $settings = $this->get_settings_for_display();
 
@@ -33,6 +43,6 @@ class WooMultiCheckout extends \Elementor\Widget_Base {
     }
 }
 
-add_action('elementor/widgets/widgets_registered', function($widgets_manager) {
+add_action('elementor/widgets/widgets_registered', function ($widgets_manager) {
     $widgets_manager->register_widget_type(new WooMultiCheckout());
 });

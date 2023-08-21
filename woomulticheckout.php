@@ -1,8 +1,9 @@
 <?php
+
 /**
  * Plugin Name: WooMultiCheckout for Elementor
  * Description: A custom Elementor widget for WooCommerce multistep checkout.
- * Version: 1.0.0
+ * Version: 1.0.2
  * Author: NKDesign30
  */
 
@@ -22,6 +23,7 @@ require_once WMC_PLUGIN_PATH . 'includes/functions.php';
 // Register the widget in Elementor
 add_action('elementor/widgets/widgets_registered', 'register_woomulticheckout_widget');
 
-function register_woomulticheckout_widget() {
+function register_woomulticheckout_widget()
+{
     \Elementor\Plugin::instance()->widgets_manager->register_widget_type(new \WooMultiCheckout());
 }
