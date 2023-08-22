@@ -68,17 +68,31 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        var editLinks = document.querySelectorAll('.edit-link');
-        editLinks.forEach(function(editLink) {
-            editLink.addEventListener('click', function(event) {
-                event.preventDefault();
-                var editId = event.target.getAttribute('data-edit');
-                var displayElement = document.getElementById(editId + '-display');
-                var editElement = document.getElementById(editId);
-                displayElement.classList.toggle('hidden');
-                editElement.classList.toggle('hidden');
-            });
-        });
+        var shippingFirstName = localStorage.getItem('shipping_first_name');
+        var shippingLastName = localStorage.getItem('shipping_last_name');
+        var shippingAddress1 = localStorage.getItem('shipping_address_1');
+        var shippingCity = localStorage.getItem('shipping_city');
+        var shippingPostcode = localStorage.getItem('shipping_postcode');
+        var shippingCountry = localStorage.getItem('shipping_country');
+
+        var billingFirstName = localStorage.getItem('billing_first_name');
+        var billingLastName = localStorage.getItem('billing_last_name');
+        var billingAddress1 = localStorage.getItem('billing_address_1');
+        var billingCity = localStorage.getItem('billing_city');
+        var billingPostcode = localStorage.getItem('billing_postcode');
+        var billingCountry = localStorage.getItem('billing_country');
+
+        var paymentMethod = localStorage.getItem('payment_method');
+        var couponCode = localStorage.getItem('coupon_code');
+
+        document.getElementById('shipping-name-display').textContent = shippingFirstName + ' ' + shippingLastName;
+        document.getElementById('shipping-address-display').textContent = shippingAddress1 + ', ' + shippingCity + ', ' + shippingPostcode;
+
+        document.getElementById('billing-name-display').textContent = billingFirstName + ' ' + billingLastName;
+        document.getElementById('billing-address-display').textContent = billingAddress1 + ', ' + billingCity + ', ' + billingPostcode;
+
+        document.getElementById('payment-method-display').textContent = paymentMethod;
+        document.getElementById('coupon-code-display').textContent = couponCode;
     });
 </script>
 <style>

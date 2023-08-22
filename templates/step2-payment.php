@@ -23,11 +23,17 @@
         <button id="next-step">Weiter</button>
     </form>
 </div>
-
 <script>
     jQuery(document).ready(function($) {
         $('#next-step').on('click', function(e) {
             e.preventDefault();
+
+            var paymentMethod = document.getElementById('payment-method').value;
+            var couponCode = document.getElementById('coupon-code').value;
+
+            localStorage.setItem('payment_method', paymentMethod);
+            localStorage.setItem('coupon_code', couponCode);
+
             var currentStep = parseInt($('#current-step').val());
             var nextStep = currentStep + 1;
             var url = window.location.href;
@@ -55,6 +61,7 @@
         }
     });
 </script>
+
 <style>
     .wmc-review-section {
         border: 1px solid #f5f5f5;

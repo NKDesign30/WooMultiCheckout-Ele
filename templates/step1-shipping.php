@@ -34,33 +34,26 @@
             var postcode = document.getElementById('postcode').value;
             var country = document.getElementById('country').value;
 
-            var shippingAddress = {
-                first_name: firstName,
-                last_name: lastName,
-                address_1: address,
-                city: city,
-                postcode: postcode,
-                country: country
-            };
+            localStorage.setItem('shipping_first_name', firstName);
+            localStorage.setItem('shipping_last_name', lastName);
+            localStorage.setItem('shipping_address_1', address);
+            localStorage.setItem('shipping_city', city);
+            localStorage.setItem('shipping_postcode', postcode);
+            localStorage.setItem('shipping_country', country);
 
-            var billingAddress = shippingAddress; // Assuming billing address is the same as shipping address
+            // Assuming billing address is the same as shipping address
+            localStorage.setItem('billing_first_name', firstName);
+            localStorage.setItem('billing_last_name', lastName);
+            localStorage.setItem('billing_address_1', address);
+            localStorage.setItem('billing_city', city);
+            localStorage.setItem('billing_postcode', postcode);
+            localStorage.setItem('billing_country', country);
 
-            $.ajax({
-                type: 'POST',
-                url: '<?php echo admin_url('admin-ajax.php'); ?>',
-                data: {
-                    action: 'save_address',
-                    shipping_address: shippingAddress,
-                    billing_address: billingAddress
-                },
-                success: function(response) {
-                    var currentStep = parseInt($('#current-step').val());
-                    var nextStep = currentStep + 1;
-                    var url = window.location.href;
-                    var newUrl = updateUrlParameter(url, 'step', nextStep);
-                    window.location.href = newUrl;
-                }
-            });
+            var currentStep = parseInt($('#current-step').val());
+            var nextStep = currentStep + 1;
+            var url = window.location.href;
+            var newUrl = updateUrlParameter(url, 'step', nextStep);
+            window.location.href = newUrl;
         });
 
         function updateUrlParameter(url, param, paramVal) {
@@ -83,6 +76,7 @@
         }
     });
 </script>
+
 <style>
     .wmc-review-section {
         border: 1px solid #f5f5f5;
