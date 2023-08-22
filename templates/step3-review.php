@@ -9,7 +9,7 @@
                 $selected_gateway = WC()->session->get('chosen_payment_method');
                 if (isset($available_gateways[$selected_gateway])) {
                     $gateway = $available_gateways[$selected_gateway];
-                    echo '<img src="' . esc_url($gateway->get_icon()) . '" alt="' . esc_attr($gateway->get_title()) . ' Logo">';
+                    echo $gateway->get_icon();
                     echo esc_html($gateway->get_title());
                 }
                 ?>
