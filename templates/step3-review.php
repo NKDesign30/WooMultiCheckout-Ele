@@ -2,44 +2,54 @@
     <h2><?php _e('Schritt 3: Überprüfung', 'woomulticheckout'); ?></h2>
     <form id="wmc-step3-form" method="post">
         <div class="wmc-review-section">
-            <h3><?php _e('Zahlungsmethode', 'woomulticheckout'); ?></h3>
-            <p id="wmc-review-payment-method">
-                <!-- Display selected payment method here -->
-                <select name="payment_method" id="payment-method">
-                    <?php
-                    $available_gateways = WC()->payment_gateways->get_available_payment_gateways();
-                    foreach ($available_gateways as $gateway) {
-                        echo '<option value="' . esc_attr($gateway->id) . '">' . esc_html($gateway->get_title()) . '</option>';
-                    }
-                    ?>
-                </select>
+            <h3><?php _e('Zahlungsmethode', 'woomulticheckout'); ?> <span class="edit-link" data-edit="payment-method">bearbeiten</span></h3>
+            <p id="payment-method-display">
+                <?php
+                $available_gateways = WC()->payment_gateways->get_available_payment_gateways();
+                $selected_gateway = WC()->session->get('chosen_payment_method');
+                echo esc_html($available_gateways[$selected_gateway]->get_title());
+                ?>
             </p>
+            <select name="payment_method" id="payment-method" class="hidden">
+                <?php
+                foreach ($available_gateways as $gateway) {
+                    echo '<option value="' . esc_attr($gateway->id) . '">' . esc_html($gateway->get_title()) . '</option>';
+                }
+                ?>
+            </select>
         </div>
         <div class="wmc-review-section">
-            <h3><?php _e('Rabattcode', 'woomulticheckout'); ?></h3>
-            <p id="wmc-review-coupon-code">
-                <!-- Display applied coupon code here -->
-                <input type="text" name="coupon_code" value="<?php echo esc_attr($couponCode); ?>">
+            <h3><?php _e('Rabattcode', 'woomulticheckout'); ?> <span class="edit-link" data-edit="coupon-code">bearbeiten</span></h3>
+            <p id="coupon-code-display">
+                <?php
+                $applied_coupons = WC()->cart->get_applied_coupons();
+                echo esc_html(implode(', ', $applied_coupons));
+                ?>
             </p>
+            <input type="text" name="coupon_code" id="coupon-code" class="hidden" value="<?php echo esc_attr(implode(', ', $applied_coupons)); ?>">
         </div>
         <div class="wmc-review-section">
-            <h3><?php _e('Lieferadresse', 'woomulticheckout'); ?></h3>
-            <p>
-                <span id="shipping-address-display"><!-- Display shipping address here --></span>
-                <a href="#" id="edit-shipping-address"><?php _e('Bearbeiten', 'woomulticheckout'); ?></a>
+            <h3><?php _e('Lieferadresse', 'woomulticheckout'); ?> <span class="edit-link" data-edit="shipping-address">bearbeiten</span></h3>
+            <p id="shipping-address-display">
+                <?php
+                $shipping_address = WC()->customer->get_shipping_address_1() . ', ' . WC()->customer->get_shipping_city() . ', ' . WC()->customer->get_shipping_postcode();
+                echo esc_html($shipping_address);
+                ?>
             </p>
-            <textarea name="shipping_address" id="shipping-address" class="hidden"><?php echo esc_textarea($shippingAddress); ?></textarea>
+            <textarea name="shipping_address" id="shipping-address" class="hidden"><?php echo esc_textarea($shipping_address); ?></textarea>
         </div>
         <div class="wmc-review-section">
-            <h3><?php _e('Rechnungsadresse', 'woomulticheckout'); ?></h3>
-            <p>
-                <span id="billing-address-display"><!-- Display billing address here --></span>
-                <a href="#" id="edit-billing-address"><?php _e('Bearbeiten', 'woomulticheckout'); ?></a>
+            <h3><?php _e('Rechnungsadresse', 'woomulticheckout'); ?> <span class="edit-link" data-edit="billing-address">bearbeiten</span></h3>
+            <p id="billing-address-display">
+                <?php
+                $billing_address = WC()->customer->get_billing_address_1() . ', ' . WC()->customer->get_billing_city() . ', ' . WC()->customer->get_billing_postcode();
+                echo esc_html($billing_address);
+                ?>
             </p>
-            <textarea name="billing_address" id="billing-address" class="hidden"><?php echo esc_textarea($billingAddress); ?></textarea>
+            <textarea name="billing_address" id="billing-address" class="hidden"><?php echo esc_textarea($billing_address); ?></textarea>
         </div>
         <div class="wmc-review-section">
-            <h3><?php _e('Bestellung', 'woomulticheckout'); ?></h3>
+            <h3><?php _e('Bestellung', 'woomulticheckout'); ?> <span>bearbeiten</span></h3>
             <div id="wmc-review-order">
                 <!-- Display order details here -->
                 <?php
@@ -55,46 +65,22 @@
                 ?>
             </div>
         </div>
-        <button type="button" id="wmc-update-order"><?php _e('Änderungen speichern', 'woomulticheckout'); ?></button>
         <button type="submit" id="wmc-place-order" name="place_order"><?php _e('Jetzt bestellen', 'woomulticheckout'); ?></button>
     </form>
 </div>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Toggling between display and edit mode for shipping address
-        var editShippingAddressLink = document.getElementById('edit-shipping-address');
-        var shippingAddressDisplay = document.getElementById('shipping-address-display');
-        var shippingAddressTextarea = document.getElementById('shipping-address');
-
-        editShippingAddressLink.addEventListener('click', function(event) {
-            event.preventDefault();
-            shippingAddressDisplay.classList.add('hidden');
-            shippingAddressTextarea.classList.remove('hidden');
-        });
-
-        // Toggling between display and edit mode for billing address
-        var editBillingAddressLink = document.getElementById('edit-billing-address');
-        var billingAddressDisplay = document.getElementById('billing-address-display');
-        var billingAddressTextarea = document.getElementById('billing-address');
-
-        editBillingAddressLink.addEventListener('click', function(event) {
-            event.preventDefault();
-            billingAddressDisplay.classList.add('hidden');
-            billingAddressTextarea.classList.remove('hidden');
-        });
-
-        // Saving updated information
-        var updateOrderButton = document.getElementById('wmc-update-order');
-        updateOrderButton.addEventListener('click', function() {
-            shippingAddressDisplay.textContent = shippingAddressTextarea.value;
-            billingAddressDisplay.textContent = billingAddressTextarea.value;
-
-            // Hide the textareas and display the updated addresses
-            shippingAddressDisplay.classList.remove('hidden');
-            shippingAddressTextarea.classList.add('hidden');
-            billingAddressDisplay.classList.remove('hidden');
-            billingAddressTextarea.classList.add('hidden');
+        var editLinks = document.querySelectorAll('.edit-link');
+        editLinks.forEach(function(editLink) {
+            editLink.addEventListener('click', function(event) {
+                event.preventDefault();
+                var editId = event.target.getAttribute('data-edit');
+                var displayElement = document.getElementById(editId + '-display');
+                var editElement = document.getElementById(editId);
+                displayElement.classList.toggle('hidden');
+                editElement.classList.toggle('hidden');
+            });
         });
     });
 </script>
