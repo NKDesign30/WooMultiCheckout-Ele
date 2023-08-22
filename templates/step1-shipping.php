@@ -1,28 +1,61 @@
-<div class="step1-shipping">
-    <h2>Versanddetails</h2>
-    <form id="step1-form">
-        <label for="first-name">Vorname:</label>
-        <input type="text" id="first-name" name="first-name" required>
-        <label for="last-name">Nachname:</label>
-        <input type="text" id="last-name" name="last-name" required>
-        <label for="address">Adresse:</label>
-        <input type="text" id="address" name="address" required>
-        <label for="city">Stadt:</label>
-        <input type="text" id="city" name="city" required>
-        <label for="postcode">Postleitzahl:</label>
-        <input type="text" id="postcode" name="postcode" required>
-        <label for="country">Land:</label>
-        <select id="country" name="country">
-            <option value="de">Deutschland</option>
-            <option value="at">Österreich</option>
-            <option value="ch">Schweiz</option>
-        </select>
-        <input type="hidden" id="current-step" value="1">
-        <div class="next-button-container">
-            <button id="next-step">Weiter</button>
-        </div>
-    </form>
+<div class="step1-form-container">
+    <h2>Wohin sollen wir dein Paket schicken?</h2>
+    <div class="step1-form-box">
+        <form id="step1-form">
+            <div class="form-field">
+                <label for="anrede">Anrede:</label>
+                <select name="anrede" id="anrede">
+                    <option value="herr">Herr</option>
+                    <option value="frau">Frau</option>
+                </select>
+            </div>
+            <div class="form-field">
+                <label for="vorname">Vorname:</label>
+                <input type="text" name="vorname" id="vorname" required>
+            </div>
+            <div class="form-field">
+                <label for="nachname">Nachname:</label>
+                <input type="text" name="nachname" id="nachname" required>
+            </div>
+            <div class="form-field">
+                <label for="strasse">Straße und Hausnummer:</label>
+                <input type="text" name="strasse" id="strasse" required>
+            </div>
+            <div class="form-field">
+                <label for="plz">Postleitzahl:</label>
+                <input type="text" name="plz" id="plz" required>
+            </div>
+            <div class="form-field">
+                <label for="ort">Ort/Stadt:</label>
+                <input type="text" name="ort" id="ort" required>
+            </div>
+            <div class="form-field">
+                <label for="land">Land/Region:</label>
+                <select name="land" id="land">
+                    <option value="deutschland">Deutschland</option>
+                    <option value="oesterreich">Österreich</option>
+                    <option value="schweiz">Schweiz</option>
+                </select>
+            </div>
+            <div class="form-field">
+                <label for="telefon">Telefon:</label>
+                <input type="text" name="telefon" id="telefon" required>
+            </div>
+            <div class="form-field">
+                <label for="email">Email Adresse:</label>
+                <input type="email" name="email" id="email" required>
+            </div>
+            <div class="form-field">
+                <label for="anmerkungen">Anmerkungen:</label>
+                <textarea name="anmerkungen" id="anmerkungen" required></textarea>
+            </div>
+            <div class="next-button-container">
+                <button id="next-step">Weiter</button>
+            </div>
+        </form>
+    </div>
 </div>
+
 
 <script>
     jQuery(document).ready(function($) {
@@ -80,34 +113,38 @@
 </script>
 
 <style>
-    .wmc-review-section {
-        border: 1px solid #f5f5f5;
-        border-radius: 20px;
-        padding: 20px;
-        margin-bottom: 20px;
-    }
-
-    .wmc-review-section h3 {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        font-size: 18px;
-        font-weight: bold;
-        margin-bottom: 10px;
-    }
-
-    .wmc-review-section p {
+    .step1-form-container {
         font-size: 16px;
     }
 
-    .edit-link {
-        cursor: pointer;
-        color: blue;
-        text-decoration: underline;
+    .step1-form-box {
+        border: 1px solid #f5f5f5;
+        border-radius: 20px;
+        padding: 20px;
     }
 
-    .hidden {
-        display: none;
+    .form-field {
+        margin-bottom: 20px;
+    }
+
+    .form-field label {
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    .form-field input[type="text"],
+    .form-field input[type="email"],
+    .form-field select,
+    .form-field textarea {
+        border: 1px solid #cfc47e;
+        border-radius: 15px;
+        padding: 5px 10px;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .form-field textarea {
+        height: 100px;
     }
 
     .next-button-container {
@@ -120,12 +157,11 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        width: 114%;
+        width: 100%;
         box-shadow: 0 -5px 10px rgba(0, 0, 0, 0.1);
         box-sizing: border-box;
         margin: 0;
         padding: 0;
-        margin-left: -7%;
     }
 
     #next-step {
