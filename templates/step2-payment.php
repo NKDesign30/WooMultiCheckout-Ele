@@ -29,7 +29,8 @@
             e.preventDefault();
 
             var paymentMethod = document.getElementById('payment-method').value;
-            var couponCode = document.getElementById('coupon-code').value;
+            var couponCodeElement = document.getElementById('coupon-code');
+            var couponCode = couponCodeElement ? couponCodeElement.value : '';
 
             localStorage.setItem('payment_method', paymentMethod);
             localStorage.setItem('coupon_code', couponCode);
@@ -61,6 +62,7 @@
         }
     });
 </script>
+
 
 <style>
     .wmc-review-section {
