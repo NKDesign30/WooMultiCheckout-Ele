@@ -5,10 +5,13 @@
         <div class="wmc-review-section">
             <h3><?php _e('Zahlungsmethode', 'woomulticheckout'); ?> <span class="edit-link" data-edit="payment-method">bearbeiten</span></h3>
             <p id="payment-method-display">
-                <img src="URL_des_Bildes_der_Zahlungsmethode" alt="Zahlungsmethode Logo">
                 <?php
                 $selected_gateway = WC()->session->get('chosen_payment_method');
-                echo esc_html($available_gateways[$selected_gateway]->get_title());
+                if (isset($available_gateways[$selected_gateway])) {
+                    $gateway = $available_gateways[$selected_gateway];
+                    echo '<img src="' . esc_url($gateway->get_icon()) . '" alt="' . esc_attr($gateway->get_title()) . ' Logo">';
+                    echo esc_html($gateway->get_title());
+                }
                 ?>
             </p>
             <select name="payment_method" id="payment-method" class="hidden">

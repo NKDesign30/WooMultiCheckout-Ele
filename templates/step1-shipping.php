@@ -10,28 +10,29 @@
                 </select>
             </div>
             <div class="form-field">
-                <label for="vorname">Vorname:</label>
-                <input type="text" name="vorname" id="vorname" required>
+                <label for="first-name">Vorname:</label>
+                <input type="text" id="first-name" name="first-name" required>
+
             </div>
             <div class="form-field">
                 <label for="nachname">Nachname:</label>
-                <input type="text" name="nachname" id="nachname" required>
+                <input type="text" name="last-name" id="last-name" required>
             </div>
             <div class="form-field">
                 <label for="strasse">Straße und Hausnummer:</label>
-                <input type="text" name="strasse" id="strasse" required>
+                <input type="text" name="address" id="address" required>
             </div>
             <div class="form-field">
                 <label for="plz">Postleitzahl:</label>
-                <input type="text" name="plz" id="plz" required>
+                <input type="text" name="postcode" id="postcode" required>
             </div>
             <div class="form-field">
                 <label for="ort">Ort/Stadt:</label>
-                <input type="text" name="ort" id="ort" required>
+                <input type="text" name="city" id="city" required>
             </div>
             <div class="form-field">
                 <label for="land">Land/Region:</label>
-                <select name="land" id="land">
+                <select name="country" id="country">
                     <option value="deutschland">Deutschland</option>
                     <option value="oesterreich">Österreich</option>
                     <option value="schweiz">Schweiz</option>
@@ -39,7 +40,7 @@
             </div>
             <div class="form-field">
                 <label for="telefon">Telefon:</label>
-                <input type="text" name="telefon" id="telefon" required>
+                <input type="text" name="phone" id="phone" required>
             </div>
             <div class="form-field">
                 <label for="email">Email Adresse:</label>
@@ -47,8 +48,10 @@
             </div>
             <div class="form-field">
                 <label for="anmerkungen">Anmerkungen:</label>
-                <textarea name="anmerkungen" id="anmerkungen" required></textarea>
+                <textarea name="notes" id="notes"></textarea>
             </div>
+            <input type="hidden" id="current-step" value="1">
+
             <div class="next-button-container">
                 <button id="next-step">Weiter</button>
             </div>
