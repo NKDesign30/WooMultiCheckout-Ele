@@ -98,7 +98,7 @@
         var billingPostcode = localStorage.getItem('billing_postcode');
         var billingCountry = localStorage.getItem('billing_country');
 
-        var paymentMethod = localStorage.getItem('payment_method');
+        var selectedPaymentMethod = localStorage.getItem('payment_method');
         var couponCode = localStorage.getItem('coupon_code');
 
         document.getElementById('shipping-name-display').textContent = shippingFirstName + ' ' + shippingLastName;
@@ -107,10 +107,19 @@
         document.getElementById('billing-name-display').textContent = billingFirstName + ' ' + billingLastName;
         document.getElementById('billing-address-display').textContent = billingAddress1 + ', ' + billingCity + ', ' + billingPostcode;
 
-        document.getElementById('payment-method-display').textContent = paymentMethod;
+        // Anzeigen der ausgewählten Zahlungsmethode
+        var paymentMethodDisplay = document.getElementById('payment-method-display');
+        var selectedGateway = <?php echo json_encode($available_gateways); ?>[selectedPaymentMethod];
+        if (selectedGateway) {
+            paymentMethodDisplay.innerHTML = selectedGateway.icon + ' ' + selectedGateway.title;
+        } else {
+            paymentMethodDisplay.textContent = selectedPaymentMethod;
+        }
+
         document.getElementById('coupon-code-display').textContent = couponCode;
     });
 </script>
+
 <style>
     .wmc-review-section {
         border: 1px solid #f5f5f5;
