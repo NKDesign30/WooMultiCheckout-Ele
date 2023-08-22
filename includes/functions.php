@@ -87,3 +87,16 @@ function wmc_get_countries()
     $countries = WC()->countries->get_countries();
     return $countries;
 }
+function custom_paypal_icon()
+{
+    function woocommerce_paypal_payments_gateway_icon($icon, $id)
+    {
+        if ($id === 'ppcp-gateway') {
+            return '<img src="' . plugin_dir_url(dirname(__FILE__)) . '../assets/images/paypal-seeklogo.com.svg" alt="PayPal Payments" />';
+        } else {
+            return $icon;
+        }
+    }
+    add_filter('woocommerce_gateway_icon', 'woocommerce_paypal_payments_gateway_icon', 10, 2);
+}
+add_action('plugins_loaded', 'custom_paypal_icon');
