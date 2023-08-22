@@ -4,6 +4,8 @@
         <?php $available_gateways = WC()->payment_gateways->get_available_payment_gateways(); ?>
         <div class="wmc-review-section">
             <!-- Debugging für Zahlungsmethode -->
+            <?php var_dump(WC()->session->get('chosen_payment_method')); ?>
+
             <h3><?php _e('Zahlungsmethode', 'woomulticheckout'); ?> <span class="edit-link" data-edit="payment-method">bearbeiten</span></h3>
             <p id="payment-method-display">
                 <?php
@@ -109,11 +111,15 @@
 
         // Anzeigen der ausgewählten Zahlungsmethode
         var paymentMethodDisplay = document.getElementById('payment-method-display');
-        var selectedGateway = <?php echo json_encode($available_gateways); ?>[selectedPaymentMethod];
-        if (selectedGateway) {
-            paymentMethodDisplay.innerHTML = selectedGateway.icon + ' ' + selectedGateway.title;
+        var paymentMethodTitle = jQuery("label[for='payment_method_" + selectedPaymentMethod + "']").text();
+        var paymentMethodIcon = jQuery("label[for='payment_method_" + selectedPaymentMethod + "'] img").clone();
+
+        if (paymentMethodIcon.length) {
+            paymentMethodDisplay.innerHTML = '';
+            paymentMethodDisplay.appendChild(paymentMethodIcon[0]);
+            paymentMethodDisplay.append(' ' + paymentMethodTitle);
         } else {
-            paymentMethodDisplay.textContent = selectedPaymentMethod;
+            paymentMethodDisplay.textContent = paymentMethodTitle;
         }
 
         document.getElementById('coupon-code-display').textContent = couponCode;

@@ -37,6 +37,11 @@
             e.preventDefault();
 
             var paymentMethod = $("input[name='payment_method']:checked").val();
+            console.log("Ausgewählte Zahlungsmethode:", paymentMethod); // Überprüfen Sie den ausgewählten Wert
+
+            var existingPaymentMethod = localStorage.getItem('payment_method');
+            console.log("Vorhandene Zahlungsmethode im lokalen Speicher:", existingPaymentMethod); // Überprüfen Sie den vorhandenen Wert im lokalen Speicher
+
             var couponCodeElement = document.getElementById('coupon_code');
             var couponCode = couponCodeElement ? couponCodeElement.value : '';
 
@@ -70,6 +75,7 @@
         }
     });
 </script>
+
 
 <style>
     .wmc-review-section {
