@@ -18,7 +18,9 @@
             <option value="ch">Schweiz</option>
         </select>
         <input type="hidden" id="current-step" value="1">
-        <button id="next-step">Weiter</button>
+        <div class="next-button-container">
+            <button id="next-step">Weiter</button>
+        </div>
     </form>
 </div>
 
@@ -106,5 +108,38 @@
 
     .hidden {
         display: none;
+    }
+
+    .next-button-container {
+        position: sticky;
+        bottom: 0;
+        background-color: #fff;
+        border-top-left-radius: 15px;
+        border-top-right-radius: 15px;
+        height: 80px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 114%;
+        box-shadow: 0 -5px 10px rgba(0, 0, 0, 0.1);
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        margin-left: -7%;
+    }
+
+    #next-step {
+        background-color: #cfc47e;
+        color: #fff;
+        border: none;
+        border-radius: 35px;
+        padding: 10px 20px;
+        cursor: pointer;
+        width: 80%;
+        height: 44px;
+    }
+
+    #next-step:hover {
+        background-color: #b5b06a;
     }
 </style>

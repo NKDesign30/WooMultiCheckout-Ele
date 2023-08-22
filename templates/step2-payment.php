@@ -17,13 +17,18 @@
             }
         }
         ?>
-        <div class="coupon-field">
-            <label for="coupon_code">Gutscheincode:</label>
-            <input type="text" name="coupon_code" id="coupon_code" placeholder="Gutscheincode eingeben">
-            <button type="submit" name="apply_coupon" value="Gutschein anwenden">Gutschein anwenden</button>
+        <h2>Hast du einen Gutschein oder Rabattcode?</h2>
+        <div class="coupon-container">
+            <label for="coupon_code">Rabattcode:</label>
+            <div class="coupon-field">
+                <input type="text" name="coupon_code" id="coupon_code" placeholder="Gutscheincode eingeben">
+                <button type="submit" name="apply_coupon" value="Gutschein anwenden">Anwenden</button>
+            </div>
         </div>
         <input type="hidden" id="current-step" value="2">
-        <button id="next-step">Weiter</button>
+        <div class="next-button-container">
+            <button id="next-step">Weiter</button>
+        </div>
     </form>
 </div>
 <script>
@@ -123,5 +128,76 @@
         width: 30px;
         height: 30px;
         margin-right: 10px;
+    }
+
+    .coupon-container {
+        border: 1px solid #f5f5f5;
+        border-radius: 20px;
+        padding: 20px;
+        font-size: 16px;
+    }
+
+    .coupon-field {
+        display: flex;
+        align-items: center;
+    }
+
+    .coupon-field label {
+        display: block;
+        margin-bottom: 10px;
+    }
+
+    .coupon-field input[type="text"] {
+        border: 1px solid #cfc47e;
+        border-radius: 15px;
+        padding: 5px 10px;
+        margin-right: 20px;
+        flex-grow: 1;
+    }
+
+    .coupon-field button {
+        background-color: #cfc47e;
+        color: #fff;
+        border: none;
+        border-radius: 15px;
+        padding: 5px 10px;
+        cursor: pointer;
+    }
+
+    .coupon-field button:hover {
+        background-color: #b5b06a;
+    }
+
+    .next-button-container {
+        position: sticky;
+        bottom: 0;
+        background-color: #fff;
+        border-top-left-radius: 15px;
+        border-top-right-radius: 15px;
+        height: 80px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 114%;
+        box-shadow: 0 -5px 10px rgba(0, 0, 0, 0.1);
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        margin-left: -7%;
+    }
+
+    #next-step {
+        background-color: #cfc47e;
+        color: #fff;
+        border: none;
+        border-radius: 35px;
+        padding: 10px 20px;
+        cursor: pointer;
+        width: 80%;
+        height: 44px;
+    }
+
+    #next-step:hover {
+        background-color: #b5b06a;
     }
 </style>
