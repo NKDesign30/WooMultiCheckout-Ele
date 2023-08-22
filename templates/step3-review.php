@@ -3,12 +3,25 @@
     <form id="wmc-step3-form" method="post">
         <?php $available_gateways = WC()->payment_gateways->get_available_payment_gateways(); ?>
         <div class="wmc-review-section">
+            <!-- Debugging für Zahlungsmethode -->
             <h3><?php _e('Zahlungsmethode', 'woomulticheckout'); ?> <span class="edit-link" data-edit="payment-method">bearbeiten</span></h3>
             <p id="payment-method-display">
                 <?php
                 $selected_gateway = WC()->session->get('chosen_payment_method');
+
+                // Debug-Ausgabe
+                echo '<pre>Selected Gateway: ';
+                var_dump($selected_gateway);
+                echo '</pre>';
+
                 if (isset($available_gateways[$selected_gateway])) {
                     $gateway = $available_gateways[$selected_gateway];
+
+                    // Debug-Ausgabe für das Icon
+                    echo '<pre>Gateway Icon: ';
+                    var_dump($gateway->get_icon());
+                    echo '</pre>';
+
                     echo $gateway->get_icon();
                     echo esc_html($gateway->get_title());
                 }
