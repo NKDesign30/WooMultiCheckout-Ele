@@ -62,19 +62,27 @@
         $('#next-step').on('click', function(e) {
             e.preventDefault();
 
+            var anrede = document.getElementById('anrede').value;
             var firstName = document.getElementById('first-name').value;
             var lastName = document.getElementById('last-name').value;
             var address = document.getElementById('address').value;
             var city = document.getElementById('city').value;
             var postcode = document.getElementById('postcode').value;
             var country = document.getElementById('country').value;
+            var phone = document.getElementById('phone').value;
+            var email = document.getElementById('email').value;
+            var notes = document.getElementById('notes').value;
 
+            localStorage.setItem('anrede', anrede);
             localStorage.setItem('shipping_first_name', firstName);
             localStorage.setItem('shipping_last_name', lastName);
             localStorage.setItem('shipping_address_1', address);
             localStorage.setItem('shipping_city', city);
             localStorage.setItem('shipping_postcode', postcode);
             localStorage.setItem('shipping_country', country);
+            localStorage.setItem('phone', phone);
+            localStorage.setItem('email', email);
+            localStorage.setItem('notes', notes);
 
             // Assuming billing address is the same as shipping address
             localStorage.setItem('billing_first_name', firstName);
@@ -157,11 +165,12 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        width: 100%;
+        width: 114%;
         box-shadow: 0 -5px 10px rgba(0, 0, 0, 0.1);
         box-sizing: border-box;
         margin: 0;
         padding: 0;
+        margin-left: -7%;
     }
 
     #next-step {
