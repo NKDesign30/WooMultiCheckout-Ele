@@ -1,11 +1,11 @@
 <div class="wmc-step wmc-step3">
     <h2><?php _e('Schritt 3: Überprüfung', 'woomulticheckout'); ?></h2>
     <form id="wmc-step3-form" method="post">
+        <?php $available_gateways = WC()->payment_gateways->get_available_payment_gateways(); ?>
         <div class="wmc-review-section">
             <h3><?php _e('Zahlungsmethode', 'woomulticheckout'); ?> <span class="edit-link" data-edit="payment-method">bearbeiten</span></h3>
             <p id="payment-method-display">
                 <?php
-                $available_gateways = WC()->payment_gateways->get_available_payment_gateways();
                 $selected_gateway = WC()->session->get('chosen_payment_method');
                 echo esc_html($available_gateways[$selected_gateway]->get_title());
                 ?>
