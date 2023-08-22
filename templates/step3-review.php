@@ -8,20 +8,9 @@
             <p id="payment-method-display">
                 <?php
                 $selected_gateway = WC()->session->get('chosen_payment_method');
-
-                // Debug-Ausgabe
-                echo '<pre>Selected Gateway: ';
-                var_dump($selected_gateway);
-                echo '</pre>';
-
+                var_dump($selected_gateway); // Debugging: Zeigt das ausgewählte Zahlungsgateway an.
                 if (isset($available_gateways[$selected_gateway])) {
                     $gateway = $available_gateways[$selected_gateway];
-
-                    // Debug-Ausgabe für das Icon
-                    echo '<pre>Gateway Icon: ';
-                    var_dump($gateway->get_icon());
-                    echo '</pre>';
-
                     echo $gateway->get_icon();
                     echo esc_html($gateway->get_title());
                 }
@@ -83,6 +72,11 @@
 </div>
 
 <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var paymentMethod = localStorage.getItem('payment_method');
+        console.log("Payment Method from Local Storage in Step 3:", paymentMethod); // Debugging: Zeigt die Zahlungsmethode aus dem Local Storage in der Konsole an.
+    });
+
     document.addEventListener('DOMContentLoaded', function() {
         var shippingFirstName = localStorage.getItem('shipping_first_name');
         var shippingLastName = localStorage.getItem('shipping_last_name');
