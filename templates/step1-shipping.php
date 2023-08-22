@@ -27,25 +27,40 @@
         $('#next-step').on('click', function(e) {
             e.preventDefault();
 
-            // Hier können Sie den Code aus Ihrem JavaScript mit document.getElementById hinzufügen
-            console.log('Button clicked'); // Debugging-Anweisung
             var firstName = document.getElementById('first-name').value;
             var lastName = document.getElementById('last-name').value;
             var address = document.getElementById('address').value;
             var city = document.getElementById('city').value;
             var postcode = document.getElementById('postcode').value;
             var country = document.getElementById('country').value;
-            var shippingAddress = firstName + ' ' + lastName + ', ' + address + ', ' + city + ', ' + postcode + ', ' + country;
-            localStorage.setItem('shippingAddress', shippingAddress);
+
+            var shippingAddress = {
+                first_name: firstName,
+                last_name: lastName,
+                address_1: address,
+                city: city,
+                postcode: postcode,
+                country: country
+            };
 
             var billingAddress = shippingAddress; // Assuming billing address is the same as shipping address
-            localStorage.setItem('billingAddress', billingAddress);
 
-            var currentStep = parseInt($('#current-step').val());
-            var nextStep = currentStep + 1;
-            var url = window.location.href;
-            var newUrl = updateUrlParameter(url, 'step', nextStep);
-            window.location.href = newUrl;
+            $.ajax({
+                type: 'POST',
+                url: '<?php echo admin_url('admin-ajax.php'); ?>',
+                data: {
+                    action: 'save_address',
+                    shipping_address: shippingAddress,
+                    billing_address: billingAddress
+                },
+                success: function(response) {
+                    var currentStep = parseInt($('#current-step').val());
+                    var nextStep = currentStep + 1;
+                    var url = window.location.href;
+                    var newUrl = updateUrlParameter(url, 'step', nextStep);
+                    window.location.href = newUrl;
+                }
+            });
         });
 
         function updateUrlParameter(url, param, paramVal) {

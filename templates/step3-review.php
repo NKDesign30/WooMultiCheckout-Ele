@@ -5,6 +5,7 @@
         <div class="wmc-review-section">
             <h3><?php _e('Zahlungsmethode', 'woomulticheckout'); ?> <span class="edit-link" data-edit="payment-method">bearbeiten</span></h3>
             <p id="payment-method-display">
+                <img src="URL_des_Bildes_der_Zahlungsmethode" alt="Zahlungsmethode Logo">
                 <?php
                 $selected_gateway = WC()->session->get('chosen_payment_method');
                 echo esc_html($available_gateways[$selected_gateway]->get_title());
@@ -31,20 +32,16 @@
         <div class="wmc-review-section">
             <h3><?php _e('Lieferadresse', 'woomulticheckout'); ?> <span class="edit-link" data-edit="shipping-address">bearbeiten</span></h3>
             <p id="shipping-address-display">
-                <?php
-                $shipping_address = WC()->customer->get_shipping_address_1() . ', ' . WC()->customer->get_shipping_city() . ', ' . WC()->customer->get_shipping_postcode();
-                echo esc_html($shipping_address);
-                ?>
+                <span class="wmc-label">Name:</span> <span class="wmc-value" id="shipping-name-display"><?php echo esc_html(WC()->session->get('shipping_first_name') . ' ' . WC()->session->get('shipping_last_name')); ?></span><br>
+                <span class="wmc-label">Adresse:</span> <span class="wmc-value" id="shipping-address-display"><?php echo esc_html(WC()->session->get('shipping_address_1') . ', ' . WC()->session->get('shipping_city') . ', ' . WC()->session->get('shipping_postcode')); ?></span>
             </p>
             <textarea name="shipping_address" id="shipping-address" class="hidden"><?php echo esc_textarea($shipping_address); ?></textarea>
         </div>
         <div class="wmc-review-section">
             <h3><?php _e('Rechnungsadresse', 'woomulticheckout'); ?> <span class="edit-link" data-edit="billing-address">bearbeiten</span></h3>
             <p id="billing-address-display">
-                <?php
-                $billing_address = WC()->customer->get_billing_address_1() . ', ' . WC()->customer->get_billing_city() . ', ' . WC()->customer->get_billing_postcode();
-                echo esc_html($billing_address);
-                ?>
+                <span class="wmc-label">Name:</span> <span class="wmc-value" id="billing-name-display"><?php echo esc_html(WC()->session->get('billing_first_name') . ' ' . WC()->session->get('billing_last_name')); ?></span><br>
+                <span class="wmc-label">Adresse:</span> <span class="wmc-value" id="billing-address-display"><?php echo esc_html(WC()->session->get('billing_address_1') . ', ' . WC()->session->get('billing_city') . ', ' . WC()->session->get('billing_postcode')); ?></span>
             </p>
             <textarea name="billing_address" id="billing-address" class="hidden"><?php echo esc_textarea($billing_address); ?></textarea>
         </div>
@@ -113,5 +110,13 @@
 
     .hidden {
         display: none;
+    }
+
+    .wmc-label {
+        color: #c3c3c3;
+    }
+
+    .wmc-value {
+        font-weight: bold;
     }
 </style>
