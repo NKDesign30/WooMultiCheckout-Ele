@@ -1,40 +1,29 @@
-.checkout-step {
+.wmc-review-section {
+    border: 1px solid #f5f5f5;
+    border-radius: 20px;
     padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    background-color: #f9f9f9;
+    margin-bottom: 20px;
 }
 
-.form-group {
-    margin-bottom: 15px;
-}
-
-label {
-    display: block;
-    margin-bottom: 5px;
+.wmc-review-section h3 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 18px;
     font-weight: bold;
+    margin-bottom: 10px;
 }
 
-input[type="text"],
-input[type="tel"],
-input[type="email"],
-select {
-    width: 100%;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 14px;
+.wmc-review-section p {
+    font-size: 16px;
 }
 
-button.btn-next {
-    padding: 10px 15px;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
+.edit-link {
     cursor: pointer;
+    color: blue;
+    text-decoration: underline;
 }
 
-button.btn-next:hover {
-    background-color: #0056b3;
+.hidden {
+    display: none;
 }
