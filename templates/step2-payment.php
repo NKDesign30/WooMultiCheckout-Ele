@@ -1,36 +1,47 @@
-<div class="wmc-step wmc-step2">
-    <h2><?php _e('Schritt 2: Zahlung', 'woomulticheckout'); ?></h2>
-    <form id="wmc-step2-form" method="post">
+<div class="step2-payment">
+    <h2>Zahlung</h2>
+    <p>Bitte wählen Sie Ihre bevorzugte Zahlungsmethode aus:</p>
+    <form id="payment-form" method="post">
         <?php
+        // Get available payment gateways
         $available_gateways = WC()->payment_gateways->get_available_payment_gateways();
-        var_dump($available_gateways); // Debugging: Zeigt alle verfügbaren Zahlungsgateways an.
-        ?>
-        <div class="wmc-payment-methods">
-            <?php
+        if (!empty($available_gateways)) {
             foreach ($available_gateways as $gateway) {
-                echo '<div class="wmc-payment-method">';
-                echo '<input type="radio" id="' . esc_attr($gateway->id) . '" name="payment_method" value="' . esc_attr($gateway->id) . '">';
-                echo '<label for="' . esc_attr($gateway->id) . '">' . $gateway->get_icon() . esc_html($gateway->get_title()) . '</label>';
+                echo '<div class="payment-option">';
+                echo '<input type="radio" name="payment_method" value="' . esc_attr($gateway->id) . '" id="payment_method_' . esc_attr($gateway->id) . '">';
+                echo '<label for="payment_method_' . esc_attr($gateway->id) . '">';
+                echo $gateway->get_icon(); // Display the icon of the payment method
+                echo esc_html($gateway->get_title());
+                echo '</label>';
                 echo '</div>';
             }
-            ?>
+        }
+        ?>
+        <h2>Hast du einen Gutschein oder Rabattcode?</h2>
+        <div class="coupon-container">
+            <label for="coupon_code">Rabattcode:</label>
+            <div class="coupon-field">
+                <input type="text" name="coupon_code" id="coupon_code" placeholder="Gutscheincode eingeben">
+                <button type="submit" name="apply_coupon" value="Gutschein anwenden">Anwenden</button>
+            </div>
         </div>
         <input type="hidden" id="current-step" value="2">
         <div class="next-button-container">
-            <button id="next-step"><?php _e('Weiter', 'woomulticheckout'); ?></button>
+            <button id="next-step">Weiter</button>
         </div>
     </form>
 </div>
-
 <script>
     jQuery(document).ready(function($) {
         $('#next-step').on('click', function(e) {
             e.preventDefault();
 
             var paymentMethod = $("input[name='payment_method']:checked").val();
-            console.log("Selected Payment Method in Step 2:", paymentMethod); // Debugging: Zeigt die ausgewählte Zahlungsmethode in der Konsole an.
+            var couponCodeElement = document.getElementById('coupon_code');
+            var couponCode = couponCodeElement ? couponCodeElement.value : '';
 
             localStorage.setItem('payment_method', paymentMethod);
+            localStorage.setItem('coupon_code', couponCode);
 
             var currentStep = parseInt($('#current-step').val());
             var nextStep = currentStep + 1;

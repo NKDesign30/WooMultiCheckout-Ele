@@ -3,12 +3,10 @@
     <form id="wmc-step3-form" method="post">
         <?php $available_gateways = WC()->payment_gateways->get_available_payment_gateways(); ?>
         <div class="wmc-review-section">
-            <!-- Debugging für Zahlungsmethode -->
             <h3><?php _e('Zahlungsmethode', 'woomulticheckout'); ?> <span class="edit-link" data-edit="payment-method">bearbeiten</span></h3>
             <p id="payment-method-display">
                 <?php
                 $selected_gateway = WC()->session->get('chosen_payment_method');
-                var_dump($selected_gateway); // Debugging: Zeigt das ausgewählte Zahlungsgateway an.
                 if (isset($available_gateways[$selected_gateway])) {
                     $gateway = $available_gateways[$selected_gateway];
                     echo $gateway->get_icon();
@@ -72,11 +70,6 @@
 </div>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        var paymentMethod = localStorage.getItem('payment_method');
-        console.log("Payment Method from Local Storage in Step 3:", paymentMethod); // Debugging: Zeigt die Zahlungsmethode aus dem Local Storage in der Konsole an.
-    });
-
     document.addEventListener('DOMContentLoaded', function() {
         var shippingFirstName = localStorage.getItem('shipping_first_name');
         var shippingLastName = localStorage.getItem('shipping_last_name');
