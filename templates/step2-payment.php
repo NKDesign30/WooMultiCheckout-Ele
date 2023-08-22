@@ -28,8 +28,8 @@
         $('#next-step').on('click', function(e) {
             e.preventDefault();
 
-            var paymentMethod = document.getElementById('payment-method').value;
-            var couponCodeElement = document.getElementById('coupon-code');
+            var paymentMethod = $("input[name='payment_method']:checked").val();
+            var couponCodeElement = document.getElementById('coupon_code');
             var couponCode = couponCodeElement ? couponCodeElement.value : '';
 
             localStorage.setItem('payment_method', paymentMethod);
@@ -62,7 +62,6 @@
         }
     });
 </script>
-
 
 <style>
     .wmc-review-section {
