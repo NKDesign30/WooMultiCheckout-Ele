@@ -3,35 +3,22 @@
     <form id="wmc-step3-form" method="post">
         <?php $available_gateways = WC()->payment_gateways->get_available_payment_gateways(); ?>
         <div class="wmc-review-section">
-            <h3><?php _e('Zahlungsmethode', 'woomulticheckout'); ?> <a href="#" class="edit-link"><?php _e('bearbeiten', 'woomulticheckout'); ?></a></h3>
-            <p id="wmc-review-payment-method">
+            <h3><?php _e('Zahlungsmethode', 'woomulticheckout'); ?> <span class="edit-link" data-edit="payment-method">bearbeiten</span></h3>
+            <p id="payment-method-display">
+                <img src="URL_des_Bildes_der_Zahlungsmethode" alt="Zahlungsmethode Logo">
                 <?php
-                $paymentMethod = 'paypal'; // Set a default payment method
-                if (isset($_COOKIE['payment_method'])) {
-                    $paymentMethod = $_COOKIE['payment_method'];
-                }
-
-                switch ($paymentMethod) {
-                    case 'paypal':
-                        echo '<img src="' . plugin_dir_url(__DIR__) . 'assets/images/paypal-seeklogo.com.svg" alt="PayPal Logo">';
-                        echo 'PayPal';
-                        break;
-                    case 'klarna':
-                        echo '<img src="' . plugin_dir_url(__DIR__) . 'assets/images/Klarna marketing badge (pink rgb.svg).svg" alt="Klarna Logo">';
-                        echo 'Klarna';
-                        break;
-                    case 'credit_card':
-                        echo '<img src="' . plugin_dir_url(__DIR__) . 'assets/images/mc_symbol.svg" alt="Kreditkarte Logo">';
-                        echo 'Kreditkarte';
-                        break;
-                    default:
-                        echo $paymentMethod;
-                        break;
-                }
+                $selected_gateway = WC()->session->get('chosen_payment_method');
+                echo esc_html($available_gateways[$selected_gateway]->get_title());
                 ?>
             </p>
+            <select name="payment_method" id="payment-method" class="hidden">
+                <?php
+                foreach ($available_gateways as $gateway) {
+                    echo '<option value="' . esc_attr($gateway->id) . '">' . esc_html($gateway->get_title()) . '</option>';
+                }
+                ?>
+            </select>
         </div>
-
         <div class="wmc-review-section">
             <h3><?php _e('Rabattcode', 'woomulticheckout'); ?> <span class="edit-link" data-edit="coupon-code">bearbeiten</span></h3>
             <p id="coupon-code-display">
@@ -114,12 +101,6 @@
         border-radius: 20px;
         padding: 20px;
         margin-bottom: 20px;
-    }
-
-    .wmc-review-section img {
-        width: 50px;
-        height: auto;
-        margin-right: 10px;
     }
 
     .wmc-review-section h3 {

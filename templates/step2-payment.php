@@ -9,7 +9,10 @@
             foreach ($available_gateways as $gateway) {
                 echo '<div class="payment-option">';
                 echo '<input type="radio" name="payment_method" value="' . esc_attr($gateway->id) . '" id="payment_method_' . esc_attr($gateway->id) . '">';
-                echo '<label for="payment_method_' . esc_attr($gateway->id) . '">' . esc_html($gateway->get_title()) . '</label>';
+                echo '<label for="payment_method_' . esc_attr($gateway->id) . '">';
+                echo $gateway->get_icon(); // Display the icon of the payment method
+                echo esc_html($gateway->get_title());
+                echo '</label>';
                 echo '</div>';
             }
         }
@@ -92,5 +95,33 @@
 
     .hidden {
         display: none;
+    }
+
+    .step2-payment {
+        font-size: 16px;
+    }
+
+    .payment-option {
+        display: flex;
+        align-items: center;
+        border: 1px solid #f5f5f5;
+        border-radius: 20px;
+        padding: 10px;
+        margin-bottom: 10px;
+    }
+
+    .payment-option input[type="radio"] {
+        margin-right: 10px;
+    }
+
+    .payment-option label {
+        display: flex;
+        align-items: center;
+    }
+
+    .payment-option img {
+        width: 30px;
+        height: 30px;
+        margin-right: 10px;
     }
 </style>
