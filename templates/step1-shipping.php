@@ -68,3 +68,34 @@
         }
     });
 </script>
+<style>
+    .wmc-review-section {
+        border: 1px solid #f5f5f5;
+        border-radius: 20px;
+        padding: 20px;
+        margin-bottom: 20px;
+    }
+
+    .wmc-review-section h3 {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    .wmc-review-section p {
+        font-size: 16px;
+    }
+
+    .edit-link {
+        cursor: pointer;
+        color: blue;
+        text-decoration: underline;
+    }
+
+    .hidden {
+        display: none;
+    }
+</style>
