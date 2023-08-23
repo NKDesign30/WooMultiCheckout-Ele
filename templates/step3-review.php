@@ -102,6 +102,8 @@
 
         var selectedPaymentMethod = localStorage.getItem('payment_method');
         var couponCode = localStorage.getItem('coupon_code');
+        var paymentMethod = localStorage.getItem('payment_method');
+
 
         document.getElementById('shipping-name-display').textContent = shippingFirstName + ' ' + shippingLastName;
         document.getElementById('shipping-address-display').textContent = shippingAddress1 + ', ' + shippingCity + ', ' + shippingPostcode;

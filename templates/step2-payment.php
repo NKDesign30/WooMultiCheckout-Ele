@@ -17,6 +17,13 @@
             }
         }
         ?>
+        <!-- Einfacher Test -->
+        <div>
+            <input type="radio" name="test" value="test1"> Test 1
+            <input type="radio" name="test" value="test2"> Test 2
+        </div>
+        <!-- Ende des einfachen Tests -->
+
         <h2>Hast du einen Gutschein oder Rabattcode?</h2>
         <div class="coupon-container">
             <label for="coupon_code">Rabattcode:</label>
@@ -31,6 +38,7 @@
         </div>
     </form>
 </div>
+
 <script>
     jQuery(document).ready(function($) {
         $('#next-step').on('click', function(e) {
