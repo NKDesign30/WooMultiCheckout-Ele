@@ -17,13 +17,6 @@
             }
         }
         ?>
-        <!-- Einfacher Test -->
-        <div>
-            <input type="radio" name="test" value="test1"> Test 1
-            <input type="radio" name="test" value="test2"> Test 2
-        </div>
-        <!-- Ende des einfachen Tests -->
-
         <h2>Hast du einen Gutschein oder Rabattcode?</h2>
         <div class="coupon-container">
             <label for="coupon_code">Rabattcode:</label>
@@ -45,10 +38,10 @@
             e.preventDefault();
 
             var paymentMethod = $("input[name='payment_method']:checked").val();
-            console.log("Ausgewählte Zahlungsmethode:", paymentMethod); // Überprüfen Sie den ausgewählten Wert
+            console.log("Ausgewählte Zahlungsmethode:", paymentMethod);
 
             var existingPaymentMethod = localStorage.getItem('payment_method');
-            console.log("Vorhandene Zahlungsmethode im lokalen Speicher:", existingPaymentMethod); // Überprüfen Sie den vorhandenen Wert im lokalen Speicher
+            console.log("Vorhandene Zahlungsmethode im lokalen Speicher:", existingPaymentMethod);
 
             var couponCodeElement = document.getElementById('coupon_code');
             var couponCode = couponCodeElement ? couponCodeElement.value : '';
