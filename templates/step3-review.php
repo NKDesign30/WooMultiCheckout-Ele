@@ -126,7 +126,6 @@
         console.log("Gefundener Titel: ", paymentMethodTitle); // Debug-Ausgabe hinzugefügt
         console.log("Gefundenes Icon: ", paymentMethodIcon.length > 0 ? "Icon vorhanden" : "Kein Icon"); // Debug-Ausgabe hinzugefügt
 
-
         // Wenn ein Icon für die Zahlungsmethode vorhanden ist, wird es zusammen mit dem Titel angezeigt.
         if (paymentMethodIcon.length) {
             paymentMethodDisplay.innerHTML = '';
@@ -141,6 +140,8 @@
         document.getElementById('coupon-code-display').textContent = couponCode;
     });
 </script>
+
+
 
 <style>
     .wmc-review-section {
