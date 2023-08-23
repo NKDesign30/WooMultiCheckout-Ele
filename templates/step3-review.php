@@ -125,7 +125,8 @@
             paymentMethodIcon[0].style.width = '50px'; // Setzt die Breite des Icons auf 50px
             paymentMethodDisplay.innerHTML = '';
             paymentMethodDisplay.appendChild(paymentMethodIcon[0]);
-            paymentMethodDisplay.append(' ' + paymentMethodTitle);
+            var labelText = jQuery("label[for='payment_method_" + selectedPaymentMethod + "']").clone().children().remove().end().text(); // Entfernt das Icon aus dem Label-Text
+            paymentMethodDisplay.append(' ' + labelText.trim());
         } else {
             // Wenn kein Icon vorhanden ist, wird nur der Titel angezeigt.
             paymentMethodDisplay.textContent = paymentMethodTitle;
