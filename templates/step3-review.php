@@ -49,23 +49,41 @@
             </p>
             <textarea name="billing_address" id="billing-address" class="hidden"><?php echo esc_textarea($billing_address); ?></textarea>
         </div>
+
         <div class="wmc-review-section">
-            <h3><?php _e('Bestellung', 'woomulticheckout'); ?> <span>bearbeiten</span></h3>
+            <h3><?php _e('Warenkorb', 'woomulticheckout'); ?> <span>bearbeiten</span></h3>
             <div id="wmc-review-order">
-                <!-- Display order details here -->
+                <!-- Display cart items -->
                 <?php
-                $cart = WC()->cart;
-                if (!empty($cart->get_cart())) {
-                    echo '<ul>';
-                    foreach ($cart->get_cart() as $cart_item_key => $cart_item) {
-                        $_product = apply_filters('woocommerce_cart_item_product', $cart_item['data'], $cart_item, $cart_item_key);
-                        echo '<li>' . esc_html($_product->get_name()) . ' x ' . esc_html($cart_item['quantity']) . ' - ' . wc_price($_product->get_price() * $cart_item['quantity']) . '</li>';
-                    }
-                    echo '</ul>';
+                foreach (WC()->cart->get_cart() as $cart_item_key => $cart_item) {
+                    $_product = apply_filters('woocommerce_cart_item_product', $cart_item['data'], $cart_item, $cart_item_key);
+                    $product_id = apply_filters('woocommerce_cart_item_product_id', $cart_item['product_id'], $cart_item, $cart_item_key);
+                    echo '<div class="wmc-cart-item">';
+                    echo '<div class="wmc-cart-item-image">' . $_product->get_image() . '</div>';
+                    echo '<div class="wmc-cart-item-details">';
+                    echo '<div class="wmc-cart-item-title">' . $_product->get_name() . '</div>';
+                    echo '<div class="wmc-cart-item-quantity">x ' . $cart_item['quantity'] . '</div>';
+                    echo '<div class="wmc-cart-item-price">' . wc_price($_product->get_price() * $cart_item['quantity']) . '</div>';
+                    echo '</div></div>';
                 }
                 ?>
+
+                <!-- Display the shortcode -->
+                <div class="wmc-shortcode">
+                    <?php echo do_shortcode('[elementor-template id="34712"]'); ?>
+                </div>
+
+                <!-- Display cart totals -->
+                <div class="wmc-cart-totals">
+                    <?php foreach (WC()->cart->get_cart_totals() as $key => $total) {
+                        echo '<div class="' . esc_attr($key) . '">' . $total['label'] . ' ' . $total['value'] . '</div>';
+                    } ?>
+                </div>
             </div>
         </div>
+
+
+
         <button type="submit" id="wmc-place-order" name="place_order"><?php _e('Jetzt bestellen', 'woomulticheckout'); ?></button>
     </form>
 </div>
@@ -116,8 +134,10 @@
             paymentMethodIcon[0].style.width = '50px'; // Setzt die Breite des Icons auf 50px
             paymentMethodDisplay.innerHTML = '';
             paymentMethodDisplay.appendChild(paymentMethodIcon[0]);
-            var labelText = jQuery("label[for='payment_method_" + selectedPaymentMethod + "']").clone().children().remove().end().text(); // Entfernt das Icon aus dem Label-Text
-            paymentMethodDisplay.append(' ' + labelText.trim());
+
+            // Extrahiert den Text aus dem Label, entfernt aber das Bild-Tag
+            var labelText = jQuery("label[for='payment_method_" + selectedPaymentMethod + "']").clone().children().remove().end().text().trim();
+            paymentMethodDisplay.append(' ' + labelText);
         } else {
             // Wenn kein Icon vorhanden ist, wird nur der Titel angezeigt.
             paymentMethodDisplay.textContent = paymentMethodTitle;
