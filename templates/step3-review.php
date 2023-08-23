@@ -106,6 +106,8 @@
 
         // Hier wird die ausgewählte Zahlungsmethode und der Rabattcode aus dem LocalStorage geholt.
         var selectedPaymentMethod = localStorage.getItem('payment_method');
+        console.log("Aus LocalStorage: ", selectedPaymentMethod); // Debug-Ausgabe hinzugefügt
+
         var couponCode = localStorage.getItem('coupon_code');
 
         // Die geholten Versandinformationen werden im Überprüfungsbereich angezeigt.
@@ -120,6 +122,10 @@
         var paymentMethodDisplay = document.getElementById('payment-method-display');
         var paymentMethodTitle = jQuery("label[for='payment_method_" + selectedPaymentMethod + "']").text();
         var paymentMethodIcon = jQuery("label[for='payment_method_" + selectedPaymentMethod + "'] img").clone();
+
+        console.log("Gefundener Titel: ", paymentMethodTitle); // Debug-Ausgabe hinzugefügt
+        console.log("Gefundenes Icon: ", paymentMethodIcon.length > 0 ? "Icon vorhanden" : "Kein Icon"); // Debug-Ausgabe hinzugefügt
+
 
         // Wenn ein Icon für die Zahlungsmethode vorhanden ist, wird es zusammen mit dem Titel angezeigt.
         if (paymentMethodIcon.length) {
