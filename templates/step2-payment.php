@@ -38,7 +38,14 @@
             e.preventDefault();
 
             var paymentMethod = $("input[name='payment_method']:checked").val();
-            console.log("Ausgewählte Zahlungsmethode:", paymentMethod);
+
+            // Zusätzliche Debugging-Ausgaben
+            console.log("Bevorzugte Zahlungsmethode vor dem Setzen:", $("input[name='payment_method']:checked").val());
+
+            localStorage.setItem('payment_method', paymentMethod);
+
+            // Zusätzliche Debugging-Ausgaben
+            console.log("LocalStorage-Wert nach dem Setzen:", localStorage.getItem('payment_method'));
 
             var existingPaymentMethod = localStorage.getItem('payment_method');
             console.log("Vorhandene Zahlungsmethode im lokalen Speicher:", existingPaymentMethod);
@@ -46,7 +53,6 @@
             var couponCodeElement = document.getElementById('coupon_code');
             var couponCode = couponCodeElement ? couponCodeElement.value : '';
 
-            localStorage.setItem('payment_method', paymentMethod);
             localStorage.setItem('coupon_code', couponCode);
 
             var currentStep = parseInt($('#current-step').val());
