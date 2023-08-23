@@ -75,12 +75,16 @@
 
                 <!-- Display cart totals -->
                 <div class="wmc-cart-totals">
-                    <?php foreach (WC()->cart->get_cart_totals() as $key => $total) {
+                    <?php
+                    $totals = WC()->cart->get_totals();
+                    foreach ($totals as $key => $total) {
                         echo '<div class="' . esc_attr($key) . '">' . $total['label'] . ' ' . $total['value'] . '</div>';
-                    } ?>
+                    }
+                    ?>
                 </div>
             </div>
         </div>
+
 
 
 
