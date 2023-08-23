@@ -104,10 +104,11 @@
                                 <span>MwSt:</span>
                                 <span><?php echo wc_price($tax_total); ?></span>
                             </div>
-                            <div class="cart-row">
+                            <div class="cart-row rabatt">
                                 <span>Rabatt:</span>
                                 <span><?php echo wc_price($manual_discount); ?></span>
                             </div>
+
                             <div class="cart-row">
                                 <span>Gesamt:</span>
                                 <span><?php echo wc_price($final_total); ?></span>
@@ -223,7 +224,77 @@
         color: #c3c3c3;
     }
 
+    .wmc-cart-item-title,
+    .wmc-cart-item-price {
+        font-weight: bold;
+    }
+
     .wmc-value {
         font-weight: bold;
+    }
+
+    .custom-cart-totals-box {
+        width: 100%;
+    }
+
+    .wmc-cart-item-image img {
+        width: 50px;
+        height: auto;
+    }
+
+    .wmc-cart-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
+    .wmc-cart-item-details {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+    }
+
+    .wmc-cart-item-title {
+        flex: 1;
+    }
+
+    .wmc-cart-item-price {
+        flex: 0;
+    }
+
+    .wmc-cart-totals {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    .wmc-cart-totals .cart-row {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
+    .wmc-cart-totals .cart-row span:first-child {
+        font-weight: bold;
+    }
+
+    .wmc-cart-totals .cart-row:last-child span:first-child,
+    .wmc-cart-totals .cart-row:last-child span:last-child {
+        font-weight: bold;
+    }
+
+    .wmc-cart-totals .cart-row.rabatt span:last-child {
+        color: red;
+    }
+
+    .progress-bar-text {
+        margin-top: 15px;
+        width: 100%;
+        font-size: 12px;
     }
 </style>
