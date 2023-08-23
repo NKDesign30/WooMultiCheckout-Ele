@@ -85,7 +85,10 @@
 </div>
 
 <script>
+    // Dieser Code wird ausgeführt, sobald das Dokument vollständig geladen ist.
     document.addEventListener('DOMContentLoaded', function() {
+
+        // Hier werden die Versandinformationen aus dem LocalStorage geholt.
         var shippingFirstName = localStorage.getItem('shipping_first_name');
         var shippingLastName = localStorage.getItem('shipping_last_name');
         var shippingAddress1 = localStorage.getItem('shipping_address_1');
@@ -93,6 +96,7 @@
         var shippingPostcode = localStorage.getItem('shipping_postcode');
         var shippingCountry = localStorage.getItem('shipping_country');
 
+        // Hier werden die Rechnungsinformationen aus dem LocalStorage geholt.
         var billingFirstName = localStorage.getItem('billing_first_name');
         var billingLastName = localStorage.getItem('billing_last_name');
         var billingAddress1 = localStorage.getItem('billing_address_1');
@@ -100,30 +104,34 @@
         var billingPostcode = localStorage.getItem('billing_postcode');
         var billingCountry = localStorage.getItem('billing_country');
 
+        // Hier wird die ausgewählte Zahlungsmethode und der Rabattcode aus dem LocalStorage geholt.
         var selectedPaymentMethod = localStorage.getItem('payment_method');
         var couponCode = localStorage.getItem('coupon_code');
-        var paymentMethod = localStorage.getItem('payment_method');
 
-
+        // Die geholten Versandinformationen werden im Überprüfungsbereich angezeigt.
         document.getElementById('shipping-name-display').textContent = shippingFirstName + ' ' + shippingLastName;
         document.getElementById('shipping-address-display').textContent = shippingAddress1 + ', ' + shippingCity + ', ' + shippingPostcode;
 
+        // Die geholten Rechnungsinformationen werden im Überprüfungsbereich angezeigt.
         document.getElementById('billing-name-display').textContent = billingFirstName + ' ' + billingLastName;
         document.getElementById('billing-address-display').textContent = billingAddress1 + ', ' + billingCity + ', ' + billingPostcode;
 
-        // Anzeigen der ausgewählten Zahlungsmethode
+        // Hier wird versucht, den Titel und das Icon der ausgewählten Zahlungsmethode basierend auf dem Wert aus dem LocalStorage zu erhalten.
         var paymentMethodDisplay = document.getElementById('payment-method-display');
         var paymentMethodTitle = jQuery("label[for='payment_method_" + selectedPaymentMethod + "']").text();
         var paymentMethodIcon = jQuery("label[for='payment_method_" + selectedPaymentMethod + "'] img").clone();
 
+        // Wenn ein Icon für die Zahlungsmethode vorhanden ist, wird es zusammen mit dem Titel angezeigt.
         if (paymentMethodIcon.length) {
             paymentMethodDisplay.innerHTML = '';
             paymentMethodDisplay.appendChild(paymentMethodIcon[0]);
             paymentMethodDisplay.append(' ' + paymentMethodTitle);
         } else {
+            // Wenn kein Icon vorhanden ist, wird nur der Titel angezeigt.
             paymentMethodDisplay.textContent = paymentMethodTitle;
         }
 
+        // Der Rabattcode wird im Überprüfungsbereich angezeigt.
         document.getElementById('coupon-code-display').textContent = couponCode;
     });
 </script>
