@@ -76,43 +76,49 @@
                 <!-- Display cart totals -->
                 <div class="wmc-cart-totals">
                     <?php
-                    // Stellen Sie sicher, dass WooCommerce aktiv ist
                     if (class_exists('WooCommerce')) {
-                        global $woocommerce;
-
                         // Daten abrufen
-                        $subtotal = $woocommerce->cart->get_cart_subtotal();
-                        $shipping_total = $woocommerce->cart->get_cart_shipping_total();
-                        $tax_total = $woocommerce->cart->get_cart_tax();
-                        $discount_total = $woocommerce->cart->get_total_discount();
-                        $total = $woocommerce->cart->get_cart_total();
+                        $subtotal = WC()->cart->subtotal;
+                        $shipping_total_value = WC()->cart->shipping_total;
+                        $tax_total = WC()->cart->tax_total;
+                        $total_without_discount = WC()->cart->total;
+                        $manual_discount = $subtotal - $total_without_discount;
+                        $final_total = $subtotal - $manual_discount;
                     ?>
                         <div class="custom-cart-totals-box">
                             <div class="cart-row">
                                 <span>Zwischensumme:</span>
-                                <span><?php echo $subtotal; ?></span>
+                                <span><?php echo wc_price($subtotal); ?></span>
                             </div>
                             <div class="cart-row">
                                 <span>Versand:</span>
-                                <span><?php echo $shipping_total; ?></span>
+                                <span><?php
+                                        if ($shipping_total_value == 0) {
+                                            echo "Kostenlos!";
+                                        } else {
+                                            echo wc_price($shipping_total_value);
+                                        }
+                                        ?></span>
                             </div>
                             <div class="cart-row">
                                 <span>MwSt:</span>
-                                <span><?php echo $tax_total; ?></span>
+                                <span><?php echo wc_price($tax_total); ?></span>
                             </div>
                             <div class="cart-row">
                                 <span>Rabatt:</span>
-                                <span><?php echo wc_price($discount_total); ?></span>
+                                <span><?php echo wc_price($manual_discount); ?></span>
                             </div>
                             <div class="cart-row">
                                 <span>Gesamt:</span>
-                                <span><?php echo $total; ?></span>
+                                <span><?php echo wc_price($final_total); ?></span>
                             </div>
                         </div>
                     <?php
                     }
                     ?>
                 </div>
+
+
             </div>
         </div>
 
