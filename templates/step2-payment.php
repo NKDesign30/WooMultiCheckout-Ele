@@ -36,11 +36,15 @@
     jQuery(document).ready(function($) {
         $('#next-step').on('click', function(e) {
             e.preventDefault();
-
             var paymentMethod = $("input[name='payment_method']:checked").val();
-            console.log("Ausgewählte Zahlungsmethode:", paymentMethod);
+
+            // Log the selected payment method
+            console.log("Ausgewählte Zahlungsmethode vor dem Speichern:", paymentMethod);
 
             localStorage.setItem('payment_method', paymentMethod);
+
+            // Log the payment method after saving to localStorage
+            console.log("Zahlungsmethode nach dem Speichern:", localStorage.getItem('payment_method'));
 
             var couponCodeElement = document.getElementById('coupon_code');
             var couponCode = couponCodeElement ? couponCodeElement.value : '';

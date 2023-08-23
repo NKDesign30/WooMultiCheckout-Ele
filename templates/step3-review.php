@@ -11,11 +11,6 @@
                 <?php
                 $selected_gateway = WC()->session->get('chosen_payment_method');
 
-                // Debug-Ausgabe
-                echo '<pre>Selected Gateway: ';
-                var_dump($selected_gateway);
-                echo '</pre>';
-
                 if (isset($available_gateways[$selected_gateway])) {
                     $gateway = $available_gateways[$selected_gateway];
 
@@ -83,7 +78,6 @@
         <button type="submit" id="wmc-place-order" name="place_order"><?php _e('Jetzt bestellen', 'woomulticheckout'); ?></button>
     </form>
 </div>
-
 <script>
     // Dieser Code wird ausgeführt, sobald das Dokument vollständig geladen ist.
     document.addEventListener('DOMContentLoaded', function() {
@@ -106,7 +100,7 @@
 
         // Hier wird die ausgewählte Zahlungsmethode und der Rabattcode aus dem LocalStorage geholt.
         var selectedPaymentMethod = localStorage.getItem('payment_method');
-        console.log("Aus LocalStorage: ", selectedPaymentMethod); // Debug-Ausgabe hinzugefügt
+        console.log("Aus LocalStorage: ", selectedPaymentMethod);
 
         var couponCode = localStorage.getItem('coupon_code');
 
@@ -123,11 +117,12 @@
         var paymentMethodTitle = jQuery("label[for='payment_method_" + selectedPaymentMethod + "']").text();
         var paymentMethodIcon = jQuery("label[for='payment_method_" + selectedPaymentMethod + "'] img").clone();
 
-        console.log("Gefundener Titel: ", paymentMethodTitle); // Debug-Ausgabe hinzugefügt
-        console.log("Gefundenes Icon: ", paymentMethodIcon.length > 0 ? "Icon vorhanden" : "Kein Icon"); // Debug-Ausgabe hinzugefügt
+        console.log("Gefundener Titel: ", paymentMethodTitle);
+        console.log("Gefundenes Icon: ", paymentMethodIcon.length > 0 ? "Icon vorhanden" : "Kein Icon");
 
         // Wenn ein Icon für die Zahlungsmethode vorhanden ist, wird es zusammen mit dem Titel angezeigt.
         if (paymentMethodIcon.length) {
+            paymentMethodIcon[0].style.width = '50px'; // Setzt die Breite des Icons auf 50px
             paymentMethodDisplay.innerHTML = '';
             paymentMethodDisplay.appendChild(paymentMethodIcon[0]);
             paymentMethodDisplay.append(' ' + paymentMethodTitle);
@@ -140,9 +135,6 @@
         document.getElementById('coupon-code-display').textContent = couponCode;
     });
 </script>
-
-
-
 <style>
     .wmc-review-section {
         border: 1px solid #f5f5f5;
