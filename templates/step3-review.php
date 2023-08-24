@@ -43,23 +43,19 @@
                 <!-- Lieferadresse -->
                 <div class="wmc-review-section">
                     <h3><?php _e('Lieferadresse', 'woomulticheckout'); ?> <span class="edit-link" data-edit="shipping-address">bearbeiten</span></h3>
-                    <div id="shipping-address-display" style="display: flex; justify-content: space-between;">
-                        <div class="wmc-label-container">
+                    <p class="shipping-address-container">
+                    <div class="shipping-address-content">
+                        <div class="address-line">
                             <span class="wmc-label">Name:</span>
-                            <span class="wmc-label">Adresse:</span>
-                            <span class="wmc-label">PLZ/Ort:</span>
-                        </div>
-                        <div class="wmc-value-container">
                             <span class="wmc-value" id="shipping-name-display"><?php echo esc_html(WC()->session->get('shipping_first_name') . ' ' . WC()->session->get('shipping_last_name')); ?></span>
-                            <span class="wmc-value" id="shipping-address-line1-display"><?php echo esc_html(WC()->session->get('shipping_address_1')); ?></span>
-                            <span class="wmc-value" id="shipping-postcode-city-display"><?php echo esc_html(WC()->session->get('shipping_postcode') . ' ' . WC()->session->get('shipping_city')); ?></span>
+                        </div>
+                        <div class="address-line">
+                            <span class="wmc-label">Adresse:</span>
+                            <span class="wmc-value" id="shipping-address-display"><?php echo esc_html(WC()->session->get('shipping_address_1') . ', ' . WC()->session->get('shipping_city') . ', ' . WC()->session->get('shipping_postcode')); ?></span>
                         </div>
                     </div>
-                    <?php
-                    $shipping_address = WC()->session->get('shipping_first_name') . ' ' . WC()->session->get('shipping_last_name') . "\n" . WC()->session->get('shipping_address_1') . "\n" . WC()->session->get('shipping_postcode') . ' ' . WC()->session->get('shipping_city');
-                    ?>
-                    <textarea name="shipping_address" id="shipping-address" class="hidden" rows="4"><?php echo esc_textarea($shipping_address); ?></textarea>
-                    <button type="button" id="confirm-shipping-address" class="hidden">Bestätigen</button>
+                    </p>
+                    <textarea name="shipping_address" id="shipping-address" class="hidden"><?php echo esc_textarea($shipping_address); ?></textarea>
                 </div>
 
                 <!-- Rechnungsadresse -->
@@ -164,8 +160,6 @@
         var shippingCity = localStorage.getItem('shipping_city');
         var shippingPostcode = localStorage.getItem('shipping_postcode');
         var shippingCountry = localStorage.getItem('shipping_country');
-        var_dump(WC() - > session - > get('shipping_first_name'));
-        var_dump(WC() - > session - > get('shipping_last_name'));
 
         // Hier werden die Rechnungsinformationen aus dem LocalStorage geholt.
         var billingFirstName = localStorage.getItem('billing_first_name');
@@ -210,49 +204,11 @@
             // Wenn kein Icon vorhanden ist, wird nur der Titel angezeigt.
             paymentMethodDisplay.textContent = paymentMethodTitle;
         }
+
         // Der Rabattcode wird im Überprüfungsbereich angezeigt.
         document.getElementById('coupon-code-display').textContent = couponCode;
 
-        // Event-Listener für den "bearbeiten"-Link der Zahlungsmethode
-        document.querySelector('.edit-link[data-edit="payment-method"]').addEventListener('click', function() {
-            document.getElementById('payment-method-display').style.display = 'none';
-            document.getElementById('payment-method').style.display = 'block';
-        });
 
-        // Event-Listener für die Auswahl einer Zahlungsmethode
-        document.getElementById('payment-method').addEventListener('change', function() {
-            document.getElementById('payment-method-display').textContent = this.options[this.selectedIndex].text;
-            this.style.display = 'none';
-            document.getElementById('payment-method-display').style.display = 'block';
-        });
-
-        // Event-Listener für den "bearbeiten"-Link des Rabattcodes
-        document.querySelector('.edit-link[data-edit="coupon-code"]').addEventListener('click', function() {
-            document.getElementById('coupon-code-display').style.display = 'none';
-            document.getElementById('coupon-code').style.display = 'block';
-        });
-
-        // Event-Listener für den "bearbeiten"-Link der Lieferadresse
-        document.querySelector('.edit-link[data-edit="shipping-address"]').addEventListener('click', function() {
-            document.getElementById('shipping-address-display').style.display = 'none';
-            document.getElementById('shipping-address').style.display = 'block';
-        });
-
-        // Event-Listener für den "bearbeiten"-Link der Rechnungsadresse
-        document.querySelector('.edit-link[data-edit="billing-address"]').addEventListener('click', function() {
-            document.getElementById('billing-address-display').style.display = 'none';
-            document.getElementById('billing-address').style.display = 'block';
-        });
-        // Event-Listener für den "Bestätigen"-Button der Lieferadresse
-        document.getElementById('confirm-shipping-address').addEventListener('click', function() {
-            var updatedAddress = document.getElementById('shipping-address').value.split("\n");
-            document.getElementById('shipping-name-display').textContent = updatedAddress[0];
-            document.getElementById('shipping-address-line1-display').textContent = updatedAddress[1];
-            document.getElementById('shipping-postcode-city-display').textContent = updatedAddress[2];
-            document.getElementById('shipping-address').style.display = 'none';
-            document.getElementById('confirm-shipping-address').style.display = 'none';
-            document.getElementById('shipping-address-display').style.display = 'block';
-        });
 
     });
 </script>
@@ -382,15 +338,21 @@
             /* Größere Bilder für Desktop */
         }
 
-        .wmc-label-container,
-        .wmc-value-container {
+        .address-line {
             display: flex;
-            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        .wmc-label-container .wmc-label,
-        .wmc-value-container .wmc-value {
-            margin-bottom: 5px;
+        .wmc-label {
+            flex: 0;
+            /* nimmt nur den benötigten Platz ein */
+        }
+
+        .wmc-value {
+            flex: 1;
+            /* nimmt den verbleibenden Platz ein */
+            text-align: right;
         }
     }
 </style>
