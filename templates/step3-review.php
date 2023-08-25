@@ -26,6 +26,7 @@
                         }
                         ?>
                     </select>
+                    <button id="confirm-payment-method" class="hidden">Änderungen übernehmen</button>
                 </div>
 
                 <!-- Rabattcode -->
@@ -38,6 +39,7 @@
                         ?>
                     </p>
                     <input type="text" name="coupon_code" id="coupon-code" class="hidden" value="<?php echo esc_attr(implode(', ', $applied_coupons)); ?>">
+                    <button id="confirm-coupon-code" class="hidden">Änderungen übernehmen</button>
                 </div>
 
                 <!-- Lieferadresse -->
@@ -82,14 +84,19 @@
                             $product_id = apply_filters('woocommerce_cart_item_product_id', $cart_item['product_id'], $cart_item, $cart_item_key);
                             echo '<div class="wmc-cart-item">';
                             echo '<div class="wmc-cart-item-image">' . $_product->get_image() . '</div>';
-                            echo '<div class="wmc-cart-item-details">';
                             echo '<div class="wmc-cart-item-title">' . $_product->get_name() . '</div>';
-                            echo '<div class="wmc-cart-item-quantity">x ' . $cart_item['quantity'] . '</div>';
+                            echo '<div class="wmc-cart-item-dropdown">';
+                            echo '<select class="wmc-cart-item-quantity">';
+                            for ($i = 1; $i <= 10; $i++) {
+                                echo '<option value="' . $i . '"' . ($cart_item['quantity'] == $i ? ' selected' : '') . '>' . $i . '</option>';
+                            }
+                            echo '</select>';
+                            echo '</div>';
                             echo '<div class="wmc-cart-item-price">' . wc_price($_product->get_price() * $cart_item['quantity']) . '</div>';
-                            echo '</div></div>';
+                            echo '<div class="wmc-cart-item-button"><button class="wmc-cart-item-remove">X</button></div>';
+                            echo '</div>';
                         }
                         ?>
-
                         <!-- Display the shortcode -->
                         <div class="wmc-shortcode">
                             <?php echo do_shortcode('[elementor-template id="34712"]'); ?>
@@ -148,7 +155,6 @@
         <button type="submit" id="wmc-place-order" name="place_order"><?php _e('Jetzt bestellen', 'woomulticheckout'); ?></button>
     </form>
 </div>
-
 <script>
     // Dieser Code wird ausgeführt, sobald das Dokument vollständig geladen ist.
     document.addEventListener('DOMContentLoaded', function() {
@@ -208,10 +214,108 @@
         // Der Rabattcode wird im Überprüfungsbereich angezeigt.
         document.getElementById('coupon-code-display').textContent = couponCode;
 
+        // Funktion zum Aktualisieren der Zahlungsmethode
+        document.querySelector('[data-edit="payment-method"]').addEventListener('click', function() {
+            var paymentDisplay = document.getElementById('payment-method-display');
+            var paymentSelect = document.getElementById('payment-method');
+            var confirmButton = document.getElementById('confirm-payment-method');
+
+            paymentDisplay.classList.add('hidden');
+            paymentSelect.classList.remove('hidden');
+            confirmButton.classList.remove('hidden');
+
+            confirmButton.addEventListener('click', function() {
+                var selectedOption = paymentSelect.options[paymentSelect.selectedIndex];
+                paymentDisplay.textContent = selectedOption.textContent;
+                localStorage.setItem('payment_method', selectedOption.value);
+
+                paymentDisplay.classList.remove('hidden');
+                paymentSelect.classList.add('hidden');
+                confirmButton.classList.add('hidden');
+            });
+        });
+
+        // Funktion zum Aktualisieren des Rabattcodes
+        document.querySelector('[data-edit="coupon-code"]').addEventListener('click', function() {
+            var couponDisplay = document.getElementById('coupon-code-display');
+            var couponInput = document.getElementById('coupon-code');
+            var confirmButton = document.getElementById('confirm-coupon-code');
+
+            couponDisplay.classList.add('hidden');
+            couponInput.classList.remove('hidden');
+            confirmButton.classList.remove('hidden');
+
+            confirmButton.addEventListener('click', function() {
+                couponDisplay.textContent = couponInput.value;
+                localStorage.setItem('coupon_code', couponInput.value);
+
+                couponDisplay.classList.remove('hidden');
+                couponInput.classList.add('hidden');
+                confirmButton.classList.add('hidden');
+            });
+        });
+
+
+        var ajax_url = wc_add_to_cart_params.ajax_url; // WooCommerce AJAX-URL
+        var cartItems = document.querySelectorAll('.wmc-cart-item');
+        cartItems.forEach(function(cartItem, index) {
+            // Menge ändern
+            var quantitySelect = cartItem.querySelector('.wmc-cart-item-quantity');
+            var priceDisplay = cartItem.querySelector('.wmc-cart-item-price');
+            var productPrice = parseFloat(priceDisplay.textContent.replace(/[^0-9.,]/g, '').replace(',', '.'));
+
+            quantitySelect.addEventListener('change', function() {
+                var newQuantity = parseInt(quantitySelect.value);
+                var newPrice = productPrice * newQuantity;
+                priceDisplay.textContent = newPrice.toFixed(2) + ' €';
+
+                jQuery.ajax({
+                    type: 'POST',
+                    url: ajax_url,
+                    data: {
+                        action: 'woocommerce_update_cart',
+                        cart_item_key: cartItem.dataset.cartKey, // Annahme, dass das cartItem ein data-Attribut namens cartKey hat
+                        cart_item_qty: newQuantity
+                    },
+                    success: function(response) {
+                        if (response.fragments) {
+                            jQuery.each(response.fragments, function(key, value) {
+                                jQuery(key).replaceWith(value);
+                            });
+                        }
+                        console.log('Menge erfolgreich aktualisiert');
+                    },
+                    error: function(response) {
+                        console.error('Fehler beim Aktualisieren der Menge');
+                    }
+                });
+            });
+
+            // Artikel entfernen
+            var removeButton = cartItem.querySelector('.wmc-cart-item-remove');
+            removeButton.addEventListener('click', function(e) {
+                e.preventDefault();
+                cartItem.remove();
+
+                // AJAX-Anfrage, um den Artikel auf dem Server zu entfernen
+                jQuery.post(ajax_url, { // Verwenden Sie hier auch ajax_url anstelle von ajaxurl
+                    action: 'remove_cart_item',
+                    cart_key: index
+                }, function(response) {
+                    if (response.success) {
+                        console.log('Artikel erfolgreich entfernt');
+                    } else {
+                        console.error('Fehler beim Entfernen des Artikels');
+                    }
+                });
+            });
+        });
 
 
     });
 </script>
+
+
 <style>
     .wmc-review-section {
         border: 1px solid #f5f5f5;
@@ -285,6 +389,7 @@
 
     .wmc-cart-item-price {
         flex: 0;
+        margin: 15px;
     }
 
     .wmc-cart-totals {
@@ -330,12 +435,11 @@
         .wmc-review-left,
         .wmc-review-right {
             width: 48%;
-            /* Ein wenig weniger als 50%, um einen kleinen Abstand zwischen den Spalten zu lassen */
         }
 
         .wmc-cart-item-image img {
-            width: 70px;
-            /* Größere Bilder für Desktop */
+            width: 50px;
+            /* Reduzierte Bildgröße */
         }
 
         .address-line {
@@ -346,13 +450,94 @@
 
         .wmc-label {
             flex: 0;
-            /* nimmt nur den benötigten Platz ein */
         }
 
         .wmc-value {
             flex: 1;
-            /* nimmt den verbleibenden Platz ein */
             text-align: right;
+        }
+
+        .wmc-cart-item {
+            display: flex;
+            align-items: center;
+        }
+
+        .wmc-cart-item-image {
+            flex: 0.5;
+            /* Reduzierte Flex-Basis für Bilder */
+            margin: 0 10px;
+        }
+
+        .wmc-cart-item-title {
+            flex: 2;
+            /* Erhöhte Flex-Basis für den Titel */
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            margin: 0 10px;
+        }
+
+        .wmc-cart-item-dropdown {
+            flex: 0.5;
+            /* Reduzierte Flex-Basis für Dropdown */
+            margin: 0 10px;
+        }
+
+        .wmc-cart-item-price,
+        .wmc-cart-item-button {
+            flex: 1;
+            margin: 0 10px;
+        }
+
+        .wmc-cart-item-quantity {
+            width: 80px;
+            /* Reduzierte Dropdown-Breite */
+            padding: 5px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            font-size: 14px;
+            color: #333;
+            background-color: #fff;
+            text-align: center;
+        }
+
+        .wmc-cart-item-quantity:hover {
+            border-color: #999;
+            background-color: #f7f7f7;
+        }
+
+        .wmc-cart-item-quantity:focus {
+            outline: none;
+            box-shadow: none;
+        }
+
+        .wmc-cart-item-remove {
+            background-color: transparent;
+            /* Entfernt den Hintergrund */
+            color: #f44336;
+            /* Setzt die Farbe des "X" auf Rot */
+            padding: 5px 8px;
+            /* Passt die Polsterung an, um den Button kleiner zu machen */
+            border: none;
+            border-radius: 50%;
+            /* Macht den Button kreisförmig */
+            font-weight: bold;
+            /* Macht das "X" fett */
+            font-size: 18px;
+            /* Erhöht die Schriftgröße des "X" */
+            cursor: pointer;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            display: flex;
+            justify-content: flex-end;
+            /* Fügt eine Übergangsfarbe hinzu */
+        }
+
+        .wmc-cart-item-remove:hover {
+            background-color: #f44336;
+            /* Setzt den Hintergrund beim Überfahren auf Rot */
+            color: #fff;
+            /* Setzt die Farbe des "X" beim Überfahren auf Weiß */
         }
     }
 </style>

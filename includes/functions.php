@@ -100,3 +100,44 @@ function custom_paypal_icon()
     add_filter('woocommerce_gateway_icon', 'woocommerce_paypal_payments_gateway_icon', 10, 2);
 }
 add_action('plugins_loaded', 'custom_paypal_icon');
+// AJAX-Handler zum Aktualisieren der Warenkorbmenge
+function wmc_update_cart_item_quantity()
+{
+    $cart_key = $_POST['cart_key'];
+    $quantity = $_POST['quantity'];
+
+    WC()->cart->set_quantity($cart_key, $quantity);
+    echo json_encode(['success' => true]);
+    wp_die();
+}
+add_action('wp_ajax_wmc_update_cart_item_quantity', 'wmc_update_cart_item_quantity');
+add_action('wp_ajax_nopriv_wmc_update_cart_item_quantity', 'wmc_update_cart_item_quantity');
+
+// AJAX-Handler zum Entfernen eines Artikels aus dem Warenkorb
+function wmc_remove_cart_item()
+{
+    $cart_key = $_POST['cart_key'];
+
+    WC()->cart->remove_cart_item($cart_key);
+    echo json_encode(['success' => true]);
+    wp_die();
+}
+add_action('wp_ajax_wmc_remove_cart_item', 'wmc_remove_cart_item');
+add_action('wp_ajax_nopriv_wmc_remove_cart_item', 'wmc_remove_cart_item');
+
+function update_cart_item_quantity_and_get_total()
+{
+    $cart_key = $_POST['cart_key'];
+    $quantity = $_POST['quantity'];
+
+    // Menge im Warenkorb aktualisieren
+    WC()->cart->set_quantity($cart_key, $quantity);
+
+    // Gesamtpreis abrufen
+    $total = WC()->cart->get_total();
+
+    // Gesamtpreis zurückgeben
+    wp_send_json_success(array('total' => $total));
+}
+add_action('wp_ajax_update_cart_item_quantity_and_get_total', 'update_cart_item_quantity_and_get_total');
+add_action('wp_ajax_nopriv_update_cart_item_quantity_and_get_total', 'update_cart_item_quantity_and_get_total');
