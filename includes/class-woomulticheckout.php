@@ -58,22 +58,4 @@ class WooMultiCheckout_Widget extends Widget_Base
             echo 'Vorlagendatei nicht gefunden: ' . $template_path;
         }
     }
-
-    public function enqueue_wmc_scripts()
-    {
-        // Überprüfen Sie, ob Sie sich auf Schritt 3 befinden
-        $current_step = isset($_GET['step']) ? intval($_GET['step']) : 1;
-        if ($current_step === 3) {
-            // Skript für Schritt 3 in die Warteschlange stellen
-            wp_enqueue_script('wmc-step3', plugin_dir_url(__FILE__) . 'assets/js/step3.js', array('jquery'), '1.0.0', true);
-
-            // Lokalisieren Sie das Skript, um die AJAX-URL zu übergeben
-            wp_localize_script('wmc-step3', 'wmc_params', array(
-                'ajax_url' => admin_url('admin-ajax.php')
-            ));
-        }
-    }
 }
-
-// Stellen Sie sicher, dass die Methode enqueue_wmc_scripts() zum richtigen Zeitpunkt aufgerufen wird.
-add_action('wp_enqueue_scripts', [WooMultiCheckout_Widget::class, 'enqueue_wmc_scripts']);
