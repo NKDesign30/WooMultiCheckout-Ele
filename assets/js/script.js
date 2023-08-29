@@ -43,7 +43,7 @@ jQuery(document).ready(function($) {
         });
     });
     $('input[name="cart_qty"]').on('change', function() {
-        var product_id = $(this).data('product-id'); // Sie müssen das Produkt-ID-Attribut hinzufügen
+        var product_id = $(this).data('product-id'); 
         var quantity = $(this).val();
     
         $.ajax({
@@ -56,11 +56,12 @@ jQuery(document).ready(function($) {
             },
             success: function(response) {
                 if (response.success) {
-                    $('#cart_total').text(response.data.cart_total); // Aktualisieren Sie den Warenkorb-Gesamtbetrag
+                    $('#cart_total').text(response.data.cart_total); 
                 } else {
-                    // Fehlerbehandlung
+                    console.error('Fehler beim Aktualisieren des Warenkorb-Gesamtpreises.');
                 }
             }
         });
     });
+    
 });
