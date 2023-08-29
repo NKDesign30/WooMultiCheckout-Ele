@@ -82,7 +82,10 @@
                         foreach (WC()->cart->get_cart() as $cart_item_key => $cart_item) {
                             $_product = apply_filters('woocommerce_cart_item_product', $cart_item['data'], $cart_item, $cart_item_key);
                             $product_id = apply_filters('woocommerce_cart_item_product_id', $cart_item['product_id'], $cart_item, $cart_item_key);
-                            echo '<div class="wmc-cart-item" data-product-id="' . $item['product_id'] . '">';
+
+                            // Verwenden Sie $product_id anstelle von $item['product_id']
+                            echo '<div class="wmc-cart-item" data-product-id="' . $product_id . '">';
+
                             echo '<div class="wmc-cart-item-image">' . $_product->get_image() . '</div>';
                             echo '<div class="wmc-cart-item-title">' . $_product->get_name() . '</div>';
                             echo '<div class="wmc-cart-item-dropdown">';
@@ -97,6 +100,7 @@
                             echo '</div>';
                         }
                         ?>
+
                         <!-- Display the shortcode -->
                         <div class="wmc-shortcode">
                             <?php echo do_shortcode('[elementor-template id="34712"]'); ?>
