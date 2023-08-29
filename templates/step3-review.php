@@ -274,7 +274,7 @@
                     url: ajax_url,
                     data: {
                         action: 'woocommerce_update_cart',
-                        cart_item_key: cartItem.dataset.cartKey, // Annahme, dass das cartItem ein data-Attribut namens cartKey hat
+                        cart_item_key: cartItem.dataset.cartKey,
                         cart_item_qty: newQuantity
                     },
                     success: function(response) {
@@ -282,6 +282,11 @@
                             jQuery.each(response.fragments, function(key, value) {
                                 jQuery(key).replaceWith(value);
                             });
+                        }
+                        // Aktualisieren Sie den Gesamtpreis des Warenkorbs.
+                        var cartTotal = document.querySelector('.wmc-cart-total'); // Stellen Sie sicher, dass Sie die richtige Klasse für den Gesamtpreis des Warenkorbs verwenden
+                        if (cartTotal && response.cart_total) {
+                            cartTotal.textContent = response.cart_total;
                         }
                         console.log('Menge erfolgreich aktualisiert');
                     },
