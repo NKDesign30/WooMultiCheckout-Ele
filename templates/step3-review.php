@@ -82,7 +82,7 @@
                         foreach (WC()->cart->get_cart() as $cart_item_key => $cart_item) {
                             $_product = apply_filters('woocommerce_cart_item_product', $cart_item['data'], $cart_item, $cart_item_key);
                             $product_id = apply_filters('woocommerce_cart_item_product_id', $cart_item['product_id'], $cart_item, $cart_item_key);
-                            echo '<div class="wmc-cart-item">';
+                            echo '<div class="wmc-cart-item" data-product-id="' . $item['product_id'] . '">';
                             echo '<div class="wmc-cart-item-image">' . $_product->get_image() . '</div>';
                             echo '<div class="wmc-cart-item-title">' . $_product->get_name() . '</div>';
                             echo '<div class="wmc-cart-item-dropdown">';
@@ -269,29 +269,30 @@
                 var newPrice = productPrice * newQuantity;
                 priceDisplay.textContent = newPrice.toFixed(2) + ' €';
 
+                // Hier holen wir die Produkt-ID
+                var cartItem = event.target.closest('.wmc-cart-item'); // Findet das nächstgelegene Elternelement mit der Klasse 'wmc-cart-item'
+                var productId = cartItem.dataset.productId; // Abrufen der productId aus dem data-Attribut
+
+
                 jQuery.ajax({
                     type: 'POST',
                     url: ajax_url,
                     data: {
-                        action: 'woocommerce_update_cart',
-                        cart_item_key: cartItem.dataset.cartKey,
-                        cart_item_qty: newQuantity
+                        action: 'wmc_update_cart_total',
+                        product_id: productId,
+                        quantity: newQuantity
                     },
                     success: function(response) {
-                        if (response.fragments) {
-                            jQuery.each(response.fragments, function(key, value) {
-                                jQuery(key).replaceWith(value);
-                            });
+                        if (response.success) {
+                            // Aktualisieren Sie den Gesamtpreis des Warenkorbs basierend auf der Antwort
+                            // Zum Beispiel:
+                            // document.querySelector('.cart-total-element').textContent = response.data.cart_total;
+                        } else {
+                            console.error('Fehler beim Aktualisieren des Warenkorbs: ' + response.data);
                         }
-                        // Aktualisieren Sie den Gesamtpreis des Warenkorbs.
-                        var cartTotal = document.querySelector('.wmc-cart-total'); // Stellen Sie sicher, dass Sie die richtige Klasse für den Gesamtpreis des Warenkorbs verwenden
-                        if (cartTotal && response.cart_total) {
-                            cartTotal.textContent = response.cart_total;
-                        }
-                        console.log('Menge erfolgreich aktualisiert');
                     },
-                    error: function(response) {
-                        console.error('Fehler beim Aktualisieren der Menge');
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        console.error('AJAX-Fehler: ' + textStatus + ' - ' + errorThrown);
                     }
                 });
             });
