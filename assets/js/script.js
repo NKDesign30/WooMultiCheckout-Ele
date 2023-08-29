@@ -42,4 +42,25 @@ jQuery(document).ready(function($) {
             }
         });
     });
+    $('input[name="cart_qty"]').on('change', function() {
+        var product_id = $(this).data('product-id'); // Sie müssen das Produkt-ID-Attribut hinzufügen
+        var quantity = $(this).val();
+    
+        $.ajax({
+            url: wmc_params.ajax_url,
+            type: 'POST',
+            data: {
+                action: 'wmc_update_cart_total',
+                product_id: product_id,
+                quantity: quantity
+            },
+            success: function(response) {
+                if (response.success) {
+                    $('#cart_total').text(response.data.cart_total); // Aktualisieren Sie den Warenkorb-Gesamtbetrag
+                } else {
+                    // Fehlerbehandlung
+                }
+            }
+        });
+    });
 });

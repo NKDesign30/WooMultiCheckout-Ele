@@ -59,3 +59,19 @@ class WooMultiCheckout_Widget extends Widget_Base
         }
     }
 }
+add_action('wp_ajax_wmc_update_cart_total', 'wmc_update_cart_total');
+add_action('wp_ajax_nopriv_wmc_update_cart_total', 'wmc_update_cart_total');
+
+function wmc_update_cart_total()
+{
+    $product_id = intval($_POST['product_id']);
+    $quantity = intval($_POST['quantity']);
+
+    // Aktualisieren Sie die Produktmenge im Warenkorb
+    WC()->cart->set_quantity($product_id, $quantity);
+
+    // Holen Sie sich den aktualisierten Warenkorb-Gesamtbetrag
+    $cart_total = WC()->cart->get_cart_total();
+
+    wp_send_json_success(['cart_total' => $cart_total]);
+}
