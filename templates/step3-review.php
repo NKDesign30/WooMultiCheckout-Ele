@@ -77,10 +77,6 @@
                 <div class="wmc-review-section">
                     <h3><?php _e('Warenkorb', 'woomulticheckout'); ?> <span>bearbeiten</span></h3>
                     <div id="wmc-review-order">
-                        <a class="custom-cart-contents" href="<?php echo WC()->cart->get_cart_url(); ?>" title="<?php _e(' View your shopping cart'); ?>"><span class="cart-counter"></span></a>
-
-                        <div class="mini-cart-total"><?php woocommerce_mini_cart(); ?></div>
-
                         <!-- Display cart items -->
                         <?php
                         foreach (WC()->cart->get_cart() as $cart_item_key => $cart_item) {
@@ -93,12 +89,9 @@
                             echo '<div class="wmc-cart-item-image">' . $_product->get_image() . '</div>';
                             echo '<div class="wmc-cart-item-title">' . $_product->get_name() . '</div>';
                             echo '<div class="wmc-cart-item-dropdown">';
-                            echo '<select class="wmc-cart-item-quantity">';
-                            for ($i = 1; $i <= 10; $i++) {
-                                echo '<option value="' . $i . '"' . ($cart_item['quantity'] == $i ? ' selected' : '') . '>' . $i . '</option>';
-                            }
-                            echo '</select>';
+                            echo '<input type="number" class="qty" name="cart[' . $cart_item_key . '][qty]" value="' . $cart_item['quantity'] . '" min="1" max="10">';
                             echo '</div>';
+
                             echo '<div class="wmc-cart-item-price">' . wc_price($_product->get_price() * $cart_item['quantity']) . '</div>';
                             echo '<div class="wmc-cart-item-button"><button class="wmc-cart-item-remove">X</button></div>';
                             echo '</div>';
@@ -185,8 +178,6 @@
 
         // Hier wird die ausgewählte Zahlungsmethode und der Rabattcode aus dem LocalStorage geholt.
         var selectedPaymentMethod = localStorage.getItem('payment_method');
-        console.log("Aus LocalStorage: ", selectedPaymentMethod);
-
         var couponCode = localStorage.getItem('coupon_code');
 
         // Die geholten Versandinformationen werden im Überprüfungsbereich angezeigt.
@@ -201,9 +192,6 @@
         var paymentMethodDisplay = document.getElementById('payment-method-display');
         var paymentMethodTitle = jQuery("label[for='payment_method_" + selectedPaymentMethod + "']").text();
         var paymentMethodIcon = jQuery("label[for='payment_method_" + selectedPaymentMethod + "'] img").clone();
-
-        console.log("Gefundener Titel: ", paymentMethodTitle);
-        console.log("Gefundenes Icon: ", paymentMethodIcon.length > 0 ? "Icon vorhanden" : "Kein Icon");
 
         // Wenn ein Icon für die Zahlungsmethode vorhanden ist, wird es zusammen mit dem Titel angezeigt.
         if (paymentMethodIcon.length) {
@@ -262,67 +250,76 @@
                 confirmButton.classList.add('hidden');
             });
         });
+
         var ajax_url = wc_add_to_cart_params.ajax_url; // WooCommerce AJAX-URL
         var cartItems = document.querySelectorAll('.wmc-cart-item');
-        cartItems.forEach(function(cartItem, index) {
-            // Menge ändern
-            var quantitySelect = cartItem.querySelector('.wmc-cart-item-quantity');
-            var priceDisplay = cartItem.querySelector('.wmc-cart-item-price');
-            var productPrice = parseFloat(priceDisplay.textContent.replace(/[^0-9.,]/g, '').replace(',', '.'));
+        if (cartItems.length > 0) {
+            cartItems.forEach(function(cartItem, index) {
+                // Menge ändern
+                var quantitySelect = cartItem.querySelector('.wmc-cart-item-quantity');
+                var priceDisplay = cartItem.querySelector('.wmc-cart-item-price');
+                var productPrice = parseFloat(priceDisplay.textContent.replace(/[^0-9.,]/g, '').replace(',', '.'));
 
-            quantitySelect.addEventListener('change', function() {
-                var newQuantity = parseInt(quantitySelect.value);
-                var newPrice = productPrice * newQuantity;
-                priceDisplay.textContent = newPrice.toFixed(2) + ' €';
+                if (quantitySelect) {
+                    quantitySelect.addEventListener('change', function() {
+                        var newQuantity = parseInt(quantitySelect.value);
+                        var newPrice = productPrice * newQuantity;
+                        priceDisplay.textContent = newPrice.toFixed(2) + ' €';
 
-                var cartItem = event.target.closest('.wmc-cart-item');
-                var productId = cartItem.dataset.productId;
+                        var cartItem = event.target.closest('.wmc-cart-item');
+                        var productId = cartItem.dataset.productId;
 
-                jQuery.ajax({
-                    type: 'POST',
-                    url: ajax_url,
-                    data: {
-                        action: 'wmc_update_cart_total',
-                        product_id: productId,
-                        quantity: newQuantity
-                    },
-                    success: function(response) {
-                        if (response.success) {
-                            // Aktualisieren Sie den Gesamtpreis des Warenkorbs basierend auf der Antwort  
-                        } else {
-                            console.error('Fehler beim Aktualisieren des Warenkorbs: ' + response.data);
-                        }
-                    },
-                    error: function(jqXHR, textStatus, errorThrown) {
-                        console.log("Fehler beim Senden der AJAX-Anforderung:");
-                        console.log("HTTP-Status: " + jqXHR.status);
-                        console.log("Fehlertext: " + textStatus);
-                        console.log("Ausnahme: " + errorThrown);
-                        alert("Fehler beim Senden der AJAX-Anforderung. Bitte überprüfen Sie die Entwicklerkonsole für weitere Informationen.");
-                    }
-                });
+                        jQuery.ajax({
+                            type: 'POST',
+                            url: ajax_url,
+                            data: {
+                                action: 'wmc_update_cart_total',
+                                product_id: productId,
+                                quantity: newQuantity
+                            },
+                            success: function(response) {
+                                if (response.success) {
+                                    // Aktualisieren Sie den Gesamtpreis des Warenkorbs basierend auf der Antwort  
+                                } else {
+                                    console.error('Fehler beim Aktualisieren des Warenkorbs: ' + response.data);
+                                }
+                            },
+                            error: function(jqXHR, textStatus, errorThrown) {
+                                console.log("Fehler beim Senden der AJAX-Anforderung:");
+                                console.log("HTTP-Status: " + jqXHR.status);
+                                console.log("Fehlertext: " + textStatus);
+                                console.log("Ausnahme: " + errorThrown);
+                                alert("Fehler beim Senden der AJAX-Anforderung. Bitte überprüfen Sie die Entwicklerkonsole für weitere Informationen.");
+                            }
+                        });
+                    });
+                }
+
+                // Artikel entfernen
+                var removeButton = cartItem.querySelector('.wmc-cart-item-remove');
+                if (removeButton) {
+                    removeButton.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        cartItem.remove();
+
+                        jQuery.post(ajax_url, {
+                            action: 'remove_cart_item',
+                            cart_key: index
+                        }, function(response) {
+                            if (response.success) {
+                                console.log('Artikel erfolgreich entfernt');
+                            } else {
+                                console.error('Fehler beim Entfernen des Artikels');
+                            }
+                        });
+                    });
+                }
             });
-
-            // Artikel entfernen
-            var removeButton = cartItem.querySelector('.wmc-cart-item-remove');
-            removeButton.addEventListener('click', function(e) {
-                e.preventDefault();
-                cartItem.remove();
-
-                jQuery.post(ajax_url, {
-                    action: 'remove_cart_item',
-                    cart_key: index
-                }, function(response) {
-                    if (response.success) {
-                        console.log('Artikel erfolgreich entfernt');
-                    } else {
-                        console.error('Fehler beim Entfernen des Artikels');
-                    }
-                });
-            });
-        });
+        }
     });
 </script>
+
+
 
 <style>
     .wmc-review-section {

@@ -1,32 +1,27 @@
 jQuery(document).ready(function($) {
-  $('input.qty').on('change', function() {
-      var item_key = $(this).closest('.cart_item').data('key');
-      var quantity = $(this).val();
+    $(document).on('change', '.quantity .qty', function() {
+        var item_hash = $(this).attr('name').replace(/cart\[([\w]+)\]\[qty\]/g, "$1");
+        var item_quantity = $(this).val();
+        var currentVal = parseFloat(item_quantity);
 
-      var cart_data = {};
-      cart_data[item_key] = { qty: quantity };
+        if (currentVal === "" || currentVal === "NaN") currentVal = 0;
+        if (currentVal < 0) currentVal = 0;
 
-      $.ajax({
-          type: 'POST',
-          url: wc_cart_params.ajax_url,
-          data: {
-              action: 'woocommerce_update_cart',
-              cart: cart_data
-          },
-          success: function(response) {
-              if (response.success) {
-                  // Aktualisieren Sie den Gesamtpreis des Warenkorbs und andere relevante Teile
-                  $.each(response.data.fragments, function(key, value) {
-                      $(key).replaceWith(value);
-                  });
-              } else {
-                  // Fehlermeldung anzeigen
-                  alert(response.data.messages);
-              }
-          },
-          error: function() {
-              alert('Es gab einen Fehler beim Aktualisieren des Warenkorbs.');
-          }
-      });
-  });
+        $.ajax({
+            type: 'POST',
+            url: wc_add_to_cart_params.ajax_url,
+            data: {
+                action: 'update_cart',
+                hash: item_hash,
+                quantity: currentVal
+            },
+            success: function(response) {
+                console.log(response);
+                location.reload();
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
+    });
 });
