@@ -329,3 +329,8 @@ function update_cart_item_quantity()
   }
   wp_die();
 }
+function enqueue_woo_multicheckout_scripts()
+{
+  wp_enqueue_script('woo-multicheckout', get_site_url() . '/wp-content/plugins/woocommerce-multistep-checkout/assets/js/woo-multicheckout.js', array('jquery'), null, true);
+}
+add_action('wp_enqueue_scripts', 'enqueue_woo_multicheckout_scripts');
