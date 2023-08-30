@@ -77,87 +77,89 @@
                 <div class="wmc-review-section">
                     <h3><?php _e('Warenkorb', 'woomulticheckout'); ?> <span>bearbeiten</span></h3>
                     <div id="wmc-review-order">
-                        <!-- Display cart items -->
                         <?php
                         foreach (WC()->cart->get_cart() as $cart_item_key => $cart_item) {
                             $_product = apply_filters('woocommerce_cart_item_product', $cart_item['data'], $cart_item, $cart_item_key);
                             $product_id = apply_filters('woocommerce_cart_item_product_id', $cart_item['product_id'], $cart_item, $cart_item_key);
-
-                            // Verwenden Sie $product_id anstelle von $item['product_id']
-                            echo '<div class="wmc-cart-item" data-product-id="' . $product_id . '">';
-
-                            echo '<div class="wmc-cart-item-image">' . $_product->get_image() . '</div>';
-                            echo '<div class="wmc-cart-item-title">' . $_product->get_name() . '</div>';
-                            echo '<div class="wmc-cart-item-dropdown">';
-                            echo '<select class="wmc-cart-item-quantity">';
-                            for ($i = 1; $i <= 10; $i++) {
-                                echo '<option value="' . $i . '"' . ($cart_item['quantity'] == $i ? ' selected' : '') . '>' . $i . '</option>';
-                            }
-                            echo '</select>';
-                            echo '</div>';
-                            echo '<div class="wmc-cart-item-price">' . wc_price($_product->get_price() * $cart_item['quantity']) . '</div>';
-                            echo '<div class="wmc-cart-item-button"><button class="wmc-cart-item-remove">X</button></div>';
-                            echo '</div>';
+                        ?>
+                            <div class="wmc-cart-item" data-cart-item-key="<?php echo $cart_item_key; ?>">
+                                <div class="wmc-cart-item-image"><?php echo $_product->get_image(); ?></div>
+                                <div class="wmc-cart-item-title"><?php echo $_product->get_name(); ?></div>
+                                <div class="wmc-cart-item-dropdown">
+                                    <select class="wmc-cart-item-quantity" data-cart-item-key="<?php echo $cart_item_key; ?>">
+                                        <?php
+                                        for ($i = 1; $i <= 10; $i++) {
+                                            echo '<option value="' . $i . '"' . ($cart_item['quantity'] == $i ? ' selected' : '') . '>' . $i . '</option>';
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
+                                <div class="wmc-cart-item-price"><?php echo wc_price($_product->get_price() * $cart_item['quantity']); ?></div>
+                                <div class="wmc-cart-item-button"><button class="wmc-cart-item-remove">X</button></div>
+                            </div>
+                        <?php
                         }
                         ?>
+                    </div>
 
-                        <!-- Display the shortcode -->
-                        <div class="wmc-shortcode">
-                            <?php echo do_shortcode('[elementor-template id="34712"]'); ?>
-                        </div>
 
-                        <!-- Display cart totals -->
-                        <div class="wmc-cart-totals">
-                            <?php
-                            if (class_exists('WooCommerce')) {
-                                // Daten abrufen
-                                $subtotal = WC()->cart->subtotal;
-                                $shipping_total_value = WC()->cart->shipping_total;
-                                $tax_total = WC()->cart->tax_total;
-                                $total_without_discount = WC()->cart->total;
-                                $manual_discount = $subtotal - $total_without_discount;
-                                $final_total = $subtotal - $manual_discount;
-                            ?>
-                                <div class="custom-cart-totals-box">
-                                    <div class="cart-row">
-                                        <span>Zwischensumme:</span>
-                                        <span><?php echo wc_price($subtotal); ?></span>
-                                    </div>
-                                    <div class="cart-row">
-                                        <span>Versand:</span>
-                                        <span><?php
-                                                if ($shipping_total_value == 0) {
-                                                    echo "Kostenlos!";
-                                                } else {
-                                                    echo wc_price($shipping_total_value);
-                                                }
-                                                ?></span>
-                                    </div>
-                                    <div class="cart-row">
-                                        <span>MwSt:</span>
-                                        <span><?php echo wc_price($tax_total); ?></span>
-                                    </div>
-                                    <div class="cart-row rabatt">
-                                        <span>Rabatt:</span>
-                                        <span><?php echo wc_price($manual_discount); ?></span>
-                                    </div>
+                    <!-- Display the shortcode -->
+                    <div class="wmc-shortcode">
+                        <?php echo do_shortcode('[elementor-template id="34712"]'); ?>
+                    </div>
 
-                                    <div class="cart-row">
-                                        <span>Gesamt:</span>
-                                        <span><?php echo wc_price($final_total); ?></span>
-                                    </div>
+                    <!-- Display cart totals -->
+                    <div class="wmc-cart-totals">
+                        <?php
+                        if (class_exists('WooCommerce')) {
+                            // Daten abrufen
+                            $subtotal = WC()->cart->subtotal;
+                            $shipping_total_value = WC()->cart->shipping_total;
+                            $tax_total = WC()->cart->tax_total;
+                            $total_without_discount = WC()->cart->total;
+                            $manual_discount = $subtotal - $total_without_discount;
+                            $final_total = $subtotal - $manual_discount;
+                        ?>
+                            <div class="custom-cart-totals-box">
+                                <div class="cart-row">
+                                    <span>Zwischensumme:</span>
+                                    <span><?php echo wc_price($subtotal); ?></span>
                                 </div>
-                            <?php
-                            }
-                            ?>
-                        </div>
+                                <div class="cart-row">
+                                    <span>Versand:</span>
+                                    <span><?php
+                                            if ($shipping_total_value == 0) {
+                                                echo "Kostenlos!";
+                                            } else {
+                                                echo wc_price($shipping_total_value);
+                                            }
+                                            ?></span>
+                                </div>
+                                <div class="cart-row">
+                                    <span>MwSt:</span>
+                                    <span><?php echo wc_price($tax_total); ?></span>
+                                </div>
+                                <div class="cart-row rabatt">
+                                    <span>Rabatt:</span>
+                                    <span><?php echo wc_price($manual_discount); ?></span>
+                                </div>
+
+                                <div class="cart-row">
+                                    <span>Gesamt:</span>
+                                    <span><?php echo wc_price($final_total); ?></span>
+                                </div>
+                            </div>
+                        <?php
+                        }
+                        ?>
                     </div>
                 </div>
             </div>
         </div>
+</div>
 
-        <button type="submit" id="wmc-place-order" name="place_order"><?php _e('Jetzt bestellen', 'woomulticheckout'); ?></button>
-    </form>
+<button type="submit" id="wmc-place-order" name="place_order"><?php _e('Jetzt bestellen', 'woomulticheckout'); ?></button>
+</form>
 </div>
 <script>
     // Dieser Code wird ausgeführt, sobald das Dokument vollständig geladen ist.
@@ -259,62 +261,58 @@
             });
         });
         var ajax_url = wc_add_to_cart_params.ajax_url; // WooCommerce AJAX-URL
-        var cartItems = document.querySelectorAll('.wmc-cart-item');
-        cartItems.forEach(function(cartItem, index) {
-            // Menge ändern
-            var quantitySelect = cartItem.querySelector('.wmc-cart-item-quantity');
-            var priceDisplay = cartItem.querySelector('.wmc-cart-item-price');
-            var productPrice = parseFloat(priceDisplay.textContent.replace(/[^0-9.,]/g, '').replace(',', '.'));
 
-            quantitySelect.addEventListener('change', function() {
-                var newQuantity = parseInt(quantitySelect.value);
-                var newPrice = productPrice * newQuantity;
-                priceDisplay.textContent = newPrice.toFixed(2) + ' €';
+        // Menge ändern
+        $('.wmc-cart-item-quantity').on('change', function() {
+            var cartItemKey = $(this).closest('.wmc-cart-item').data('cart-item-key');
+            var quantity = $(this).val();
+            var priceDisplay = $(this).closest('.wmc-cart-item').find('.wmc-cart-item-price');
+            var productPrice = parseFloat(priceDisplay.text().replace(/[^0-9.,]/g, '').replace(',', '.'));
 
-                var cartItem = event.target.closest('.wmc-cart-item');
-                var productId = cartItem.dataset.productId;
-
-                jQuery.ajax({
-                    type: 'POST',
-                    url: ajax_url,
-                    data: {
-                        action: 'wmc_update_cart_total',
-                        product_id: productId,
-                        quantity: newQuantity
-                    },
-                    success: function(response) {
-                        if (response.success) {
-                            // Aktualisieren Sie den Gesamtpreis des Warenkorbs basierend auf der Antwort  
-                        } else {
-                            console.error('Fehler beim Aktualisieren des Warenkorbs: ' + response.data);
-                        }
-                    },
-                    error: function(jqXHR, textStatus, errorThrown) {
-                        console.log("Fehler beim Senden der AJAX-Anforderung:");
-                        console.log("HTTP-Status: " + jqXHR.status);
-                        console.log("Fehlertext: " + textStatus);
-                        console.log("Ausnahme: " + errorThrown);
-                        alert("Fehler beim Senden der AJAX-Anforderung. Bitte überprüfen Sie die Entwicklerkonsole für weitere Informationen.");
-                    }
-                });
-            });
-
-            // Artikel entfernen
-            var removeButton = cartItem.querySelector('.wmc-cart-item-remove');
-            removeButton.addEventListener('click', function(e) {
-                e.preventDefault();
-                cartItem.remove();
-
-                jQuery.post(ajax_url, {
-                    action: 'remove_cart_item',
-                    cart_key: index
-                }, function(response) {
+            $.ajax({
+                type: 'POST',
+                url: ajax_url,
+                data: {
+                    action: 'woocommerce_update_cart',
+                    cart_item_key: cartItemKey,
+                    quantity: quantity
+                },
+                success: function(response) {
                     if (response.success) {
-                        console.log('Artikel erfolgreich entfernt');
+                        var newPrice = productPrice * quantity;
+                        priceDisplay.text(newPrice.toFixed(2) + ' €');
                     } else {
-                        console.error('Fehler beim Entfernen des Artikels');
+                        alert('Es gab ein Problem beim Aktualisieren des Warenkorbs.');
                     }
-                });
+                },
+                error: function() {
+                    alert('Fehler beim Senden der AJAX-Anforderung.');
+                }
+            });
+        });
+
+        // Artikel entfernen
+        $('.wmc-cart-item-remove').on('click', function(e) {
+            e.preventDefault();
+            var cartItemKey = $(this).closest('.wmc-cart-item').data('cart-item-key');
+
+            $.ajax({
+                type: 'POST',
+                url: ajax_url,
+                data: {
+                    action: 'woocommerce_remove_cart_item',
+                    cart_item_key: cartItemKey
+                },
+                success: function(response) {
+                    if (response.success) {
+                        $(this).closest('.wmc-cart-item').remove();
+                    } else {
+                        alert('Fehler beim Entfernen des Artikels.');
+                    }
+                },
+                error: function() {
+                    alert('Fehler beim Senden der AJAX-Anforderung.');
+                }
             });
         });
     });
