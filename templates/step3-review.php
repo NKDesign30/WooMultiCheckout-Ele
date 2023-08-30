@@ -77,25 +77,9 @@
                 <div class="wmc-review-section">
                     <h3><?php _e('Warenkorb', 'woomulticheckout'); ?> <span>bearbeiten</span></h3>
                     <div id="wmc-review-order">
-                        <!-- Display cart items -->
-                        <?php
-                        foreach (WC()->cart->get_cart() as $cart_item_key => $cart_item) {
-                            $_product = apply_filters('woocommerce_cart_item_product', $cart_item['data'], $cart_item, $cart_item_key);
-                            $product_id = apply_filters('woocommerce_cart_item_product_id', $cart_item['product_id'], $cart_item, $cart_item_key);
-
-                            echo '<div class="wmc-cart-item" data-product-id="' . $product_id . '">';
-
-                            echo '<div class="wmc-cart-item-image">' . $_product->get_image() . '</div>';
-                            echo '<div class="wmc-cart-item-title">' . $_product->get_name() . '</div>';
-                            echo '<div class="wmc-cart-item-quantity">';
-                            echo '<input type="number" class="qty" data-key="' . $cart_item_key . '" value="' . $cart_item['quantity'] . '">';
-                            echo '</div>';
-                            echo '<div class="wmc-cart-item-price">' . wc_price($_product->get_price() * $cart_item['quantity']) . '</div>';
-                            echo '<div class="wmc-cart-item-button"><button class="wmc-cart-item-remove">X</button></div>';
-                            echo '</div>';
-                        }
-                        ?>
+                        <?php woocommerce_cart_totals(); ?>
                     </div>
+
 
 
                     <!-- Display the shortcode -->

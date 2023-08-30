@@ -24,3 +24,12 @@ function enqueue_woomulticheckout_styles()
     wp_enqueue_style('woomulticheckout-styles', plugin_dir_url(__FILE__) . 'assets/css/style.css');
 }
 add_action('wp_enqueue_scripts', 'enqueue_woomulticheckout_styles');
+
+function enqueue_woomulticheckout_scripts()
+{
+    wp_enqueue_script('woomulticheckout-scripts', WOOMULTICHECKOUT_PLUGIN_URL . 'assets/js/woo-multicheckout.js', array('jquery'), WOOMULTICHECKOUT_VERSION, true);
+    wp_localize_script('woomulticheckout-scripts', 'wc_cart_params', array(
+        'ajax_url' => admin_url('admin-ajax.php')
+    ));
+}
+add_action('wp_enqueue_scripts', 'enqueue_woomulticheckout_scripts');
