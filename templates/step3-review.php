@@ -77,6 +77,10 @@
                 <div class="wmc-review-section">
                     <h3><?php _e('Warenkorb', 'woomulticheckout'); ?> <span>bearbeiten</span></h3>
                     <div id="wmc-review-order">
+                        <a class="custom-cart-contents" href="<?php echo WC()->cart->get_cart_url(); ?>" title="<?php _e(' View your shopping cart'); ?>"><span class="cart-counter"></span></a>
+
+                        <div class="mini-cart-total"><?php woocommerce_mini_cart(); ?></div>
+
                         <!-- Display cart items -->
                         <?php
                         foreach (WC()->cart->get_cart() as $cart_item_key => $cart_item) {
