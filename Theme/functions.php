@@ -281,6 +281,8 @@ add_action('wp_head', 'add_ajaxurl_cdata_to_front', 1);
 
 function woocommerce_update_cart_action()
 {
+  error_log("AJAX-Handler 'woocommerce_update_cart' wurde aufgerufen.");
+
   $cart_item_key = $_POST['cart_item_key'];
   $cart_item_qty = $_POST['cart_item_qty'];
 
