@@ -83,81 +83,78 @@
                             $_product = apply_filters('woocommerce_cart_item_product', $cart_item['data'], $cart_item, $cart_item_key);
                             $product_id = apply_filters('woocommerce_cart_item_product_id', $cart_item['product_id'], $cart_item, $cart_item_key);
 
-                            // Verwenden Sie $product_id anstelle von $item['product_id']
                             echo '<div class="wmc-cart-item" data-product-id="' . $product_id . '">';
 
                             echo '<div class="wmc-cart-item-image">' . $_product->get_image() . '</div>';
                             echo '<div class="wmc-cart-item-title">' . $_product->get_name() . '</div>';
-                            echo '<div class="wmc-cart-item-dropdown">';
-                            echo '<select class="wmc-cart-item-quantity">';
-                            for ($i = 1; $i <= 10; $i++) {
-                                echo '<option value="' . $i . '"' . ($cart_item['quantity'] == $i ? ' selected' : '') . '>' . $i . '</option>';
-                            }
-                            echo '</select>';
+                            echo '<div class="wmc-cart-item-quantity">';
+                            echo '<input type="number" class="qty" data-key="' . $cart_item_key . '" value="' . $cart_item['quantity'] . '">';
                             echo '</div>';
                             echo '<div class="wmc-cart-item-price">' . wc_price($_product->get_price() * $cart_item['quantity']) . '</div>';
                             echo '<div class="wmc-cart-item-button"><button class="wmc-cart-item-remove">X</button></div>';
                             echo '</div>';
                         }
                         ?>
+                    </div>
 
-                        <!-- Display the shortcode -->
-                        <div class="wmc-shortcode">
-                            <?php echo do_shortcode('[elementor-template id="34712"]'); ?>
-                        </div>
 
-                        <!-- Display cart totals -->
-                        <div class="wmc-cart-totals">
-                            <?php
-                            if (class_exists('WooCommerce')) {
-                                // Daten abrufen
-                                $subtotal = WC()->cart->subtotal;
-                                $shipping_total_value = WC()->cart->shipping_total;
-                                $tax_total = WC()->cart->tax_total;
-                                $total_without_discount = WC()->cart->total;
-                                $manual_discount = $subtotal - $total_without_discount;
-                                $final_total = $subtotal - $manual_discount;
-                            ?>
-                                <div class="custom-cart-totals-box">
-                                    <div class="cart-row">
-                                        <span>Zwischensumme:</span>
-                                        <span><?php echo wc_price($subtotal); ?></span>
-                                    </div>
-                                    <div class="cart-row">
-                                        <span>Versand:</span>
-                                        <span><?php
-                                                if ($shipping_total_value == 0) {
-                                                    echo "Kostenlos!";
-                                                } else {
-                                                    echo wc_price($shipping_total_value);
-                                                }
-                                                ?></span>
-                                    </div>
-                                    <div class="cart-row">
-                                        <span>MwSt:</span>
-                                        <span><?php echo wc_price($tax_total); ?></span>
-                                    </div>
-                                    <div class="cart-row rabatt">
-                                        <span>Rabatt:</span>
-                                        <span><?php echo wc_price($manual_discount); ?></span>
-                                    </div>
+                    <!-- Display the shortcode -->
+                    <div class="wmc-shortcode">
+                        <?php echo do_shortcode('[elementor-template id="34712"]'); ?>
+                    </div>
 
-                                    <div class="cart-row">
-                                        <span>Gesamt:</span>
-                                        <span><?php echo wc_price($final_total); ?></span>
-                                    </div>
+                    <!-- Display cart totals -->
+                    <div class="wmc-cart-totals">
+                        <?php
+                        if (class_exists('WooCommerce')) {
+                            // Daten abrufen
+                            $subtotal = WC()->cart->subtotal;
+                            $shipping_total_value = WC()->cart->shipping_total;
+                            $tax_total = WC()->cart->tax_total;
+                            $total_without_discount = WC()->cart->total;
+                            $manual_discount = $subtotal - $total_without_discount;
+                            $final_total = $subtotal - $manual_discount;
+                        ?>
+                            <div class="custom-cart-totals-box">
+                                <div class="cart-row">
+                                    <span>Zwischensumme:</span>
+                                    <span><?php echo wc_price($subtotal); ?></span>
                                 </div>
-                            <?php
-                            }
-                            ?>
-                        </div>
+                                <div class="cart-row">
+                                    <span>Versand:</span>
+                                    <span><?php
+                                            if ($shipping_total_value == 0) {
+                                                echo "Kostenlos!";
+                                            } else {
+                                                echo wc_price($shipping_total_value);
+                                            }
+                                            ?></span>
+                                </div>
+                                <div class="cart-row">
+                                    <span>MwSt:</span>
+                                    <span><?php echo wc_price($tax_total); ?></span>
+                                </div>
+                                <div class="cart-row rabatt">
+                                    <span>Rabatt:</span>
+                                    <span><?php echo wc_price($manual_discount); ?></span>
+                                </div>
+
+                                <div class="cart-row">
+                                    <span>Gesamt:</span>
+                                    <span><?php echo wc_price($final_total); ?></span>
+                                </div>
+                            </div>
+                        <?php
+                        }
+                        ?>
                     </div>
                 </div>
             </div>
         </div>
+</div>
 
-        <button type="submit" id="wmc-place-order" name="place_order"><?php _e('Jetzt bestellen', 'woomulticheckout'); ?></button>
-    </form>
+<button type="submit" id="wmc-place-order" name="place_order"><?php _e('Jetzt bestellen', 'woomulticheckout'); ?></button>
+</form>
 </div>
 <script>
     // Dieser Code wird ausgeführt, sobald das Dokument vollständig geladen ist.
