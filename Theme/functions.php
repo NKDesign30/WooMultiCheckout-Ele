@@ -267,24 +267,6 @@ function woocommerce_paypal_payments_gateway_icon($icon, $id)
 add_filter('woocommerce_gateway_icon', 'woocommerce_paypal_payments_gateway_icon', 10, 2);
 
 
-function update_cart_item_quantity_and_get_total()
-{
-  $cart_key = $_POST['cart_key'];
-  $quantity = $_POST['quantity'];
-
-  // Menge im Warenkorb aktualisieren
-  WC()->cart->set_quantity($cart_key, $quantity);
-
-  // Gesamtpreis abrufen
-  $total = WC()->cart->get_total();
-
-  // Gesamtpreis zurückgeben
-  wp_send_json_success(array('total' => $total));
-}
-add_action('wp_ajax_update_cart_item_quantity_and_get_total', 'update_cart_item_quantity_and_get_total');
-add_action('wp_ajax_nopriv_update_cart_item_quantity_and_get_total', 'update_cart_item_quantity_and_get_total');
-
-
 function add_ajaxurl_cdata_to_front()
 {
 ?>
@@ -315,11 +297,11 @@ add_action('wp_ajax_nopriv_wmc_update_cart_total', 'wmc_update_cart_total');
 
 function wmc_update_cart_total()
 {
-  $product_id = intval($_POST['product_id']);
+  $cart_key = $_POST['cart_key'];
   $quantity = intval($_POST['quantity']);
 
   // Aktualisieren Sie die Produktmenge im Warenkorb
-  WC()->cart->set_quantity($product_id, $quantity);
+  WC()->cart->set_quantity($cart_key, $quantity);
 
   // Holen Sie sich den aktualisierten Warenkorb-Gesamtbetrag
   $cart_total = WC()->cart->get_cart_total();
