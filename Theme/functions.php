@@ -308,3 +308,24 @@ function wmc_update_cart_total()
 
   wp_send_json_success(['cart_total' => strip_tags($cart_total)]);
 }
+
+/*
+* Cart Counter
+*
+*/ //Enqueue Ajax Scripts
+add_action('wp_ajax_update_cart_item_quantity', 'update_cart_item_quantity');
+add_action('wp_ajax_nopriv_update_cart_item_quantity', 'update_cart_item_quantity');
+
+function update_cart_item_quantity()
+{
+  if (isset($_POST['cart_item_key']) && isset($_POST['quantity'])) {
+    $cart_item_key = sanitize_text_field($_POST['cart_item_key']);
+    $quantity = intval($_POST['quantity']);
+
+    WC()->cart->set_quantity($cart_item_key, $quantity);
+    echo json_encode(['success' => true]);
+  } else {
+    echo json_encode(['success' => false]);
+  }
+  wp_die();
+}
