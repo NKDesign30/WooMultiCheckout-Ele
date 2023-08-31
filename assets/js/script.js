@@ -42,26 +42,25 @@ jQuery(document).ready(function($) {
             }
         });
     });
-    $('input[name="cart_qty"]').on('change', function() {
+ /*   $('input[name="cart_qty"]').on('change', function() {
         var product_id = $(this).data('product-id'); 
         var quantity = $(this).val();
     
         $.ajax({
-            url: wmc_params.ajax_url,
+            url: '/wp-admin/admin-ajax.php',
             type: 'POST',
             data: {
                 action: 'wmc_update_cart_total',
-                product_id: product_id,
                 quantity: quantity
             },
             success: function(response) {
                 if (response.success) {
                     $('#cart_total').text(response.data.cart_total); 
                 } else {
-                    console.error('Fehler beim Aktualisieren des Warenkorb-Gesamtpreises.');
+                    console.error("Es gab einen Fehler bei der AJAX-Anfrage:", error);
                 }
             }
         });
     });
     
-});
+});*/

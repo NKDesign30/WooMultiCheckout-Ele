@@ -1,5 +1,5 @@
    // Dieser Code wird ausgeführt, sobald das Dokument vollständig geladen ist.
-   document.addEventListener('DOMContentLoaded', function() {
+   /*document.addEventListener('DOMContentLoaded', function() {
 
     // Hier werden die Versandinformationen aus dem LocalStorage geholt.
     var shippingFirstName = localStorage.getItem('shipping_first_name');
@@ -155,4 +155,4 @@
             });
         });
     });
-});
+});*/

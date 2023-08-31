@@ -8,8 +8,8 @@ jQuery(document).ready(function($) {
         if (currentVal < 0) currentVal = 0;
 
         $.ajax({
+            url: '/wp-admin/admin-ajax.php',
             type: 'POST',
-            url: wc_add_to_cart_params.ajax_url,
             data: {
                 action: 'update_cart',
                 hash: item_hash,

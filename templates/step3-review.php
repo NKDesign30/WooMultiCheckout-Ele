@@ -79,26 +79,187 @@
                     <div id="wmc-review-order">
                         <!-- Display cart items -->
                         <?php
-                        foreach (WC()->cart->get_cart() as $cart_item_key => $cart_item) {
-                            $_product = apply_filters('woocommerce_cart_item_product', $cart_item['data'], $cart_item, $cart_item_key);
-                            $product_id = apply_filters('woocommerce_cart_item_product_id', $cart_item['product_id'], $cart_item, $cart_item_key);
+                        /**
+                         * Cart Page
+                         *
+                         * This template can be overridden by copying it to yourtheme/woocommerce/cart/cart.php.
+                         *
+                         * HOWEVER, on occasion WooCommerce will need to update template files and you
+                         * (the theme developer) will need to copy the new files to your theme to
+                         * maintain compatibility. We try to do this as little as possible, but it does
+                         * happen. When this occurs the version of the template file will be bumped and
+                         * the readme will list any important changes.
+                         *
+                         * @see     https://docs.woocommerce.com/document/template-structure/
+                         * @package WooCommerce/Templates
+                         * @version 3.8.0
+                         */
 
-                            echo '<div class="wmc-cart-item" data-product-id="' . $product_id . '" data-cart-item-key="' . $cart_item_key . '">';
+                        defined('ABSPATH') || exit;
 
-                            echo '<div class="wmc-cart-item-image">' . $_product->get_image() . '</div>';
-                            echo '<div class="wmc-cart-item-title">' . $_product->get_name() . '</div>';
-                            echo '<div class="wmc-cart-item-dropdown">';
-                            echo '<select class="wmc-cart-item-quantity">';
-                            for ($i = 1; $i <= 10; $i++) {
-                                echo '<option value="' . $i . '"' . ($cart_item['quantity'] == $i ? ' selected' : '') . '>' . $i . '</option>';
-                            }
-                            echo '</select>';
-                            echo '</div>';
-                            echo '<div class="wmc-cart-item-price">' . wc_price($_product->get_price() * $cart_item['quantity']) . '</div>';
-                            echo '<div class="wmc-cart-item-button"><button class="wmc-cart-item-remove">X</button></div>';
-                            echo '</div>';
-                        }
-                        ?>
+                        do_action('woocommerce_before_cart'); ?>
+
+                        <form class="woocommerce-cart-form" action="<?php echo esc_url(wc_get_cart_url()); ?>" method="post">
+                            <?php do_action('woocommerce_before_cart_table'); ?>
+
+                            <table class="shop_table shop_table_responsive cart woocommerce-cart-form__contents" cellspacing="0">
+                                <thead>
+                                    <tr>
+                                        <th class="product-remove">&nbsp;</th>
+                                        <th class="product-thumbnail">&nbsp;</th>
+                                        <th class="product-name"><?php esc_html_e('Product', 'woocommerce'); ?></th>
+                                        <th class="product-price"><?php esc_html_e('Price', 'woocommerce'); ?></th>
+                                        <th class="product-quantity"><?php esc_html_e('Quantity', 'woocommerce'); ?></th>
+                                        <th class="product-subtotal"><?php esc_html_e('Subtotal', 'woocommerce'); ?></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php do_action('woocommerce_before_cart_contents'); ?>
+
+                                    <?php
+                                    foreach (WC()->cart->get_cart() as $cart_item_key => $cart_item) {
+                                        $_product   = apply_filters('woocommerce_cart_item_product', $cart_item['data'], $cart_item, $cart_item_key);
+                                        $product_id = apply_filters('woocommerce_cart_item_product_id', $cart_item['product_id'], $cart_item, $cart_item_key);
+
+                                        if ($_product && $_product->exists() && $cart_item['quantity'] > 0 && apply_filters('woocommerce_cart_item_visible', true, $cart_item, $cart_item_key)) {
+                                            $product_permalink = apply_filters('woocommerce_cart_item_permalink', $_product->is_visible() ? $_product->get_permalink($cart_item) : '', $cart_item, $cart_item_key);
+                                    ?>
+                                            <?php if ($cart_item['quantity'] == 2) : ?>
+                                                <tr>
+                                                    <td colspan="6">custom message</td>
+                                                </tr>
+                                            <?php endif; ?>
+                                            <tr class="woocommerce-cart-form__cart-item <?php echo esc_attr(apply_filters('woocommerce_cart_item_class', 'cart_item', $cart_item, $cart_item_key)); ?>">
+
+                                                <td class="product-remove">
+                                                    <?php
+                                                    echo apply_filters( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+                                                        'woocommerce_cart_item_remove_link',
+                                                        sprintf(
+                                                            '<a href="%s" class="remove" aria-label="%s" data-product_id="%s" data-product_sku="%s">&times;</a>',
+                                                            esc_url(wc_get_cart_remove_url($cart_item_key)),
+                                                            esc_html__('Remove this item', 'woocommerce'),
+                                                            esc_attr($product_id),
+                                                            esc_attr($_product->get_sku())
+                                                        ),
+                                                        $cart_item_key
+                                                    );
+                                                    ?>
+                                                </td>
+
+                                                <td class="product-thumbnail">
+                                                    <?php
+                                                    $thumbnail = apply_filters('woocommerce_cart_item_thumbnail', $_product->get_image(), $cart_item, $cart_item_key);
+
+                                                    if (!$product_permalink) {
+                                                        echo $thumbnail; // PHPCS: XSS ok.
+                                                    } else {
+                                                        printf('<a href="%s">%s</a>', esc_url($product_permalink), $thumbnail); // PHPCS: XSS ok.
+                                                    }
+                                                    ?>
+                                                </td>
+
+                                                <td class="product-name" data-title="<?php esc_attr_e('Product', 'woocommerce'); ?>">
+                                                    <?php
+                                                    if (!$product_permalink) {
+                                                        echo wp_kses_post(apply_filters('woocommerce_cart_item_name', $_product->get_name(), $cart_item, $cart_item_key) . '&nbsp;');
+                                                    } else {
+                                                        echo wp_kses_post(apply_filters('woocommerce_cart_item_name', sprintf('<a href="%s">%s</a>', esc_url($product_permalink), $_product->get_name()), $cart_item, $cart_item_key));
+                                                    }
+
+                                                    do_action('woocommerce_after_cart_item_name', $cart_item, $cart_item_key);
+
+                                                    // Meta data.
+                                                    echo wc_get_formatted_cart_item_data($cart_item); // PHPCS: XSS ok.
+
+                                                    // Backorder notification.
+                                                    if ($_product->backorders_require_notification() && $_product->is_on_backorder($cart_item['quantity'])) {
+                                                        echo wp_kses_post(apply_filters('woocommerce_cart_item_backorder_notification', '<p class="backorder_notification">' . esc_html__('Available on backorder', 'woocommerce') . '</p>', $product_id));
+                                                    }
+                                                    ?>
+                                                </td>
+
+                                                <td class="product-price" data-title="<?php esc_attr_e('Price', 'woocommerce'); ?>">
+                                                    <?php
+                                                    echo apply_filters('woocommerce_cart_item_price', WC()->cart->get_product_price($_product), $cart_item, $cart_item_key); // PHPCS: XSS ok.
+                                                    ?>
+                                                </td>
+
+                                                <td class="product-quantity" data-title="<?php esc_attr_e('Quantity', 'woocommerce'); ?>">
+                                                    <?php
+                                                    if ($_product->is_sold_individually()) {
+                                                        $product_quantity = sprintf('1 <input type="hidden" name="cart[%s][qty]" value="1" />', $cart_item_key);
+                                                    } else {
+                                                        $product_quantity = woocommerce_quantity_input(
+                                                            array(
+                                                                'input_name'   => "cart[{$cart_item_key}][qty]",
+                                                                'input_value'  => $cart_item['quantity'],
+                                                                'max_value'    => $_product->get_max_purchase_quantity(),
+                                                                'min_value'    => '0',
+                                                                'product_name' => $_product->get_name(),
+                                                            ),
+                                                            $_product,
+                                                            false
+                                                        );
+                                                    }
+
+                                                    echo apply_filters('woocommerce_cart_item_quantity', $product_quantity, $cart_item_key, $cart_item); // PHPCS: XSS ok.
+                                                    ?>
+                                                </td>
+
+                                                <td class="product-subtotal" data-title="<?php esc_attr_e('Subtotal', 'woocommerce'); ?>">
+                                                    <?php
+                                                    echo apply_filters('woocommerce_cart_item_subtotal', WC()->cart->get_product_subtotal($_product, $cart_item['quantity']), $cart_item, $cart_item_key); // PHPCS: XSS ok.
+                                                    ?>
+                                                </td>
+                                            </tr>
+                                    <?php
+                                        }
+                                    }
+                                    ?>
+
+                                    <?php do_action('woocommerce_cart_contents'); ?>
+
+                                    <tr>
+                                        <td colspan="6" class="actions">
+
+                                            <?php if (wc_coupons_enabled()) { ?>
+                                                <div class="coupon">
+                                                    <label for="coupon_code"><?php esc_html_e('Coupon:', 'woocommerce'); ?></label> <input type="text" name="coupon_code" class="input-text" id="coupon_code" value="" placeholder="<?php esc_attr_e('Coupon code', 'woocommerce'); ?>" /> <button type="submit" class="button" name="apply_coupon" value="<?php esc_attr_e('Apply coupon', 'woocommerce'); ?>"><?php esc_attr_e('Apply coupon', 'woocommerce'); ?></button>
+                                                    <?php do_action('woocommerce_cart_coupon'); ?>
+                                                </div>
+                                            <?php } ?>
+
+                                            <button type="submit" class="button" name="update_cart" value="<?php esc_attr_e('Update cart', 'woocommerce'); ?>"><?php esc_html_e('Update cart', 'woocommerce'); ?></button>
+
+                                            <?php do_action('woocommerce_cart_actions'); ?>
+
+                                            <?php wp_nonce_field('woocommerce-cart', 'woocommerce-cart-nonce'); ?>
+                                        </td>
+                                    </tr>
+
+                                    <?php do_action('woocommerce_after_cart_contents'); ?>
+                                </tbody>
+                            </table>
+                            <?php do_action('woocommerce_after_cart_table'); ?>
+                        </form>
+
+                        <?php do_action('woocommerce_before_cart_collaterals'); ?>
+
+                        <div class="cart-collaterals">
+                            <?php
+                            /**
+                             * Cart collaterals hook.
+                             *
+                             * @hooked woocommerce_cross_sell_display
+                             * @hooked woocommerce_cart_totals - 10
+                             */
+                            do_action('woocommerce_cart_collaterals');
+                            ?>
+                        </div>
+
+                        <?php do_action('woocommerce_after_cart'); ?>
+
                     </div>
                     <!-- Display the shortcode -->
                     <div class="wmc-shortcode">
@@ -251,71 +412,71 @@
             });
         });
 
-        var ajax_url = wc_add_to_cart_params.ajax_url; // WooCommerce AJAX URL
-        var cartItems = document.querySelectorAll('.wmc-cart-item');
-        if (cartItems.length > 0) {
-            cartItems.forEach(function(cartItem, index) {
-                // Change quantity
-                var quantitySelect = cartItem.querySelector('.wmc-cart-item-quantity');
-                var priceDisplay = cartItem.querySelector('.wmc-cart-item-price');
-                var productPrice = parseFloat(priceDisplay.textContent.replace(/[^0-9.,]/g, '').replace(',', '.'));
+        /*  var ajax_url = wc_add_to_cart_params.ajax_url; // WooCommerce AJAX URL
+          var cartItems = document.querySelectorAll('.wmc-cart-item');
+          if (cartItems.length > 0) {
+              cartItems.forEach(function(cartItem, index) {
+                  // Change quantity
+                  var quantitySelect = cartItem.querySelector('.wmc-cart-item-quantity');
+                  var priceDisplay = cartItem.querySelector('.wmc-cart-item-price');
+                  var productPrice = parseFloat(priceDisplay.textContent.replace(/[^0-9.,]/g, '').replace(',', '.'));
 
-                if (quantitySelect) {
-                    quantitySelect.addEventListener('change', function() {
-                        var newQuantity = parseInt(quantitySelect.value);
-                        var newPrice = productPrice * newQuantity;
-                        priceDisplay.textContent = newPrice.toFixed(2) + ' €';
+                  if (quantitySelect) {
+                      quantitySelect.addEventListener('change', function() {
+                          var newQuantity = parseInt(quantitySelect.value);
+                          var newPrice = productPrice * newQuantity;
+                          priceDisplay.textContent = newPrice.toFixed(2) + ' €';
 
-                        var cartItem = event.target.closest('.wmc-cart-item');
-                        var productId = cartItem.dataset.productId;
+                          var cartItem = event.target.closest('.wmc-cart-item');
+                          var productId = cartItem.dataset.productId;
 
-                        jQuery.ajax({
-                            type: 'POST',
-                            url: ajax_url,
-                            data: {
-                                action: 'wmc_update_cart_total',
-                                product_id: productId,
-                                quantity: newQuantity
-                            },
-                            success: function(response) {
-                                if (response.success) {
-                                    // Update the cart's total price based on the response  
-                                } else {
-                                    console.error('Error updating the cart: ' + response.data);
-                                }
-                            },
-                            error: function(jqXHR, textStatus, errorThrown) {
-                                console.log("Error sending the AJAX request:");
-                                console.log("HTTP Status: " + jqXHR.status);
-                                console.log("Error text: " + textStatus);
-                                console.log("Exception: " + errorThrown);
-                                alert("Error sending the AJAX request. Please check the developer console for more information.");
-                            }
-                        });
-                    });
-                }
+                          jQuery.ajax({
+                              type: 'POST',
+                              url: ajax_url,
+                              data: {
+                                  action: 'wmc_update_cart_total',
+                                  product_id: productId,
+                                  quantity: newQuantity
+                              },
+                              success: function(response) {
+                                  if (response.success) {
+                                      // Update the cart's total price based on the response  
+                                  } else {
+                                      console.error('Error updating the cart: ' + response.data);
+                                  }
+                              },
+                              error: function(jqXHR, textStatus, errorThrown) {
+                                  console.log("Error sending the AJAX request:");
+                                  console.log("HTTP Status: " + jqXHR.status);
+                                  console.log("Error text: " + textStatus);
+                                  console.log("Exception: " + errorThrown);
+                                  alert("Error sending the AJAX request. Please check the developer console for more information.");
+                              }
+                          });
+                      });
+                  }
 
-                // Remove item
-                var removeButton = cartItem.querySelector('.wmc-cart-item-remove');
-                if (removeButton) {
-                    removeButton.addEventListener('click', function(e) {
-                        e.preventDefault();
-                        cartItem.remove();
+                  // Remove item
+                  var removeButton = cartItem.querySelector('.wmc-cart-item-remove');
+                  if (removeButton) {
+                      removeButton.addEventListener('click', function(e) {
+                          e.preventDefault();
+                          cartItem.remove();
 
-                        jQuery.post(ajax_url, {
-                            action: 'remove_cart_item',
-                            cart_key: index
-                        }, function(response) {
-                            if (response.success) {
-                                console.log('Item successfully removed');
-                            } else {
-                                console.error('Error removing the item');
-                            }
-                        });
-                    });
-                }
-            });
-        }
+                          jQuery.post(ajax_url, {
+                              action: 'remove_cart_item',
+                              cart_key: index
+                          }, function(response) {
+                              if (response.success) {
+                                  console.log('Item successfully removed');
+                              } else {
+                                  console.error('Error removing the item');
+                              }
+                          });
+                      });
+                  }
+              });
+          } */
     });
 </script>
 
