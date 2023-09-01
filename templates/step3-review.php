@@ -87,7 +87,32 @@
 
                     <!-- Display cart totals -->
                     <div class="wmc-cart-totals">
-                        <?php echo do_shortcode('[woocommerce_checkout]'); ?>
+                        <?php if (is_user_logged_in()) : ?>
+                            <?php
+                            $checkout = WC()->checkout();
+                            if (sizeof($checkout->checkout_fields) > 0) :
+                                do_action('woocommerce_checkout_before_customer_details');
+                            endif;
+                            ?>
+
+                            <h3 id="order_review_heading"><?php _e('Your order', 'woocommerce'); ?></h3>
+
+                            <?php do_action('woocommerce_checkout_before_order_review'); ?>
+
+                            <div id="order_review" class="woocommerce-checkout-review-order">
+                                <?php
+                                // Entfernen der Zahlungsmethoden
+                                remove_action('woocommerce_review_order_before_payment', 'woocommerce_checkout_payment', 20);
+                                do_action('woocommerce_checkout_order_review');
+                                ?>
+                            </div>
+
+                            <?php do_action('woocommerce_checkout_after_order_review'); ?>
+
+                        <?php else : ?>
+                            <p><?php echo 'Bitte einloggen, um den Checkout zu sehen.'; ?></p>
+                        <?php endif; ?>
+
                         <div class="wmc-cart-totals" style="display: none;">
                             <?php
                             if (class_exists('WooCommerce')) {
