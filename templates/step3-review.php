@@ -19,47 +19,26 @@
 defined('ABSPATH') || exit;
 ?>
 
+<!-- Step 1: Adressdaten -->
+<div id="step1">
+    <?php do_action('woocommerce_checkout_billing'); ?>
+    <?php do_action('woocommerce_checkout_shipping'); ?>
+    <button id="goToStep2">Weiter zu Zahlungsdienst</button>
+</div>
+
+<!-- Step 2: Zahlungsdienst -->
+<div id="step2" style="display: none;">
+    <div class="checkout-step" id="payment-only">
+        <?php do_action('woocommerce_checkout_order_review'); ?>
+    </div>
+    <button id="goToStep3">Weiter zur Übersicht</button>
+</div>
+
+
 <!-- Step 3: Übersicht und Bestellung -->
 <div id="step3" style="display: none;">
-    <h2><?php _e('Schritt 3: Übersicht und Bestellung', 'woomulticheckout'); ?></h2>
-    <div class="wmc-step3-content">
-        <div class="wmc-step3-left">
-            <h3>Zahlungsmethode</h3>
-            <!-- Hier wird die ausgewählte Zahlungsmethode angezeigt -->
-            <div id="selected-payment-method"></div>
-
-            <h3>Rabattcode</h3>
-            <!-- Hier wird der Rabattcode angezeigt, falls vorhanden -->
-            <?php if (WC()->cart->get_coupon_discount_totals()) : ?>
-                <div id="applied-coupons">
-                    <?php foreach (WC()->cart->get_coupon_discount_totals() as $code => $amount) : ?>
-                        <span><?php echo esc_html($code); ?></span>
-                    <?php endforeach; ?>
-                </div>
-            <?php endif; ?>
-
-            <h3>Lieferadresse</h3>
-            <!-- Hier wird die Lieferadresse angezeigt -->
-            <div id="shipping-address">
-                <?php echo WC()->customer->get_shipping_address(); ?>
-            </div>
-
-            <h3>Rechnungsadresse</h3>
-            <!-- Hier wird die Rechnungsadresse angezeigt -->
-            <div id="billing-address">
-                <?php echo WC()->customer->get_billing_address(); ?>
-            </div>
-        </div>
-
-        <div class="wmc-step3-right">
-            <h3>Warenkorb</h3>
-            <!-- Hier wird der Warenkorb angezeigt -->
-            <?php do_action('woocommerce_review_order_before_cart'); ?>
-            <?php woocommerce_order_review(); ?>
-            <?php do_action('woocommerce_review_order_after_cart'); ?>
-        </div>
-    </div>
-    <button id="placeOrder" class="wmc-next-step">Bestellen</button>
+    <?php do_action('woocommerce_checkout_order_review'); ?>
+    <button id="placeOrder">Bestellen</button>
 </div>
 
 <!-- JavaScript for navigation -->
@@ -109,24 +88,5 @@ defined('ABSPATH') || exit;
     #payment-only .woocommerce-checkout-review-order-table,
     #payment-only .woocommerce-checkout-review-order {
         display: none;
-    }
-
-    .wmc-step3-content {
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 20px;
-    }
-
-    .wmc-step3-left,
-    .wmc-step3-right {
-        width: 48%;
-        /* Anpassen, je nach Bedarf */
-    }
-
-    #selected-payment-method,
-    #applied-coupons,
-    #shipping-address,
-    #billing-address {
-        margin-bottom: 20px;
     }
 </style>
