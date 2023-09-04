@@ -96,12 +96,12 @@ defined('ABSPATH') || exit;
             <div class="wmc-review-section">
                 <h3>Warenkorb</h3>
 
+
+                <?php echo do_shortcode('[woocommerce_cart]'); ?>
                 <!-- Display the shortcode -->
                 <div class="wmc-shortcode">
                     <?php echo do_shortcode('[elementor-template id="34712"]'); ?>
                 </div>
-                <?php echo do_shortcode('[woocommerce_cart]'); ?>
-
                 <!-- Rechnungsdetails -->
                 <h3>Rechnungsdetails</h3>
                 <table class="shop_table woocommerce-checkout-review-order-table">
