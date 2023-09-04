@@ -34,7 +34,6 @@ defined('ABSPATH') || exit;
     <button id="goToStep3">Weiter zur Übersicht</button>
 </div>
 
-
 <!-- Step 3: Übersicht und Bestellung -->
 <div id="step3" style="display: none;">
     <div class="wmc-review-container">
@@ -44,40 +43,33 @@ defined('ABSPATH') || exit;
             <!-- Zahlungsmethode -->
             <div class="wmc-section">
                 <h3>Zahlungsmethode</h3>
-                <div id="payment" class="woocommerce-checkout-payment">
-                    <?php if (WC()->cart->needs_payment()) : ?>
-                        <ul class="wc_payment_methods payment_methods methods">
-                            <?php
-                            if (!empty($available_gateways)) {
-                                foreach ($available_gateways as $gateway) {
-                                    wc_get_template('checkout/payment-method.php', array('gateway' => $gateway));
-                                }
-                            }
-                            ?>
-                        </ul>
-                    <?php endif; ?>
-                </div>
+                <p><?php echo WC()->session->get('chosen_payment_method'); ?></p>
             </div>
 
             <!-- Rabattcode -->
             <div class="wmc-section">
                 <h3>Rabattcode</h3>
-                <?php
-                $checkout = WC()->checkout();
-                do_action('woocommerce_before_checkout_form', $checkout);
-                ?>
+                <?php if (WC()->cart->get_coupon_discount_totals()) : ?>
+                    <?php foreach (WC()->cart->get_coupon_discount_totals() as $code => $amount) : ?>
+                        <p><?php echo esc_html($code); ?></p>
+                    <?php endforeach; ?>
+                <?php endif; ?>
             </div>
 
             <!-- Lieferadresse -->
             <div class="wmc-section">
                 <h3>Lieferadresse</h3>
-                <?php do_action('woocommerce_checkout_shipping'); ?>
+                <address>
+                    <?php echo ($address = WC()->customer->get_shipping_address()) ? $address : 'Nicht festgelegt'; ?>
+                </address>
             </div>
 
             <!-- Rechnungsadresse -->
             <div class="wmc-section">
                 <h3>Rechnungsadresse</h3>
-                <?php do_action('woocommerce_checkout_billing'); ?>
+                <address>
+                    <?php echo ($address = WC()->customer->get_billing_address()) ? $address : 'Nicht festgelegt'; ?>
+                </address>
             </div>
         </div>
 
@@ -94,6 +86,7 @@ defined('ABSPATH') || exit;
 
     <button id="placeOrder">Bestellen</button>
 </div>
+
 <!-- Styling -->
 <style>
     /* Hier kommt Ihr Styling-Code */
