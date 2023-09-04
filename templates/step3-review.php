@@ -41,22 +41,21 @@ defined('ABSPATH') || exit;
         <!-- Linke Seite: Zahlungsmethode, Rabattcode, Adressen -->
         <div class="wmc-review-left wmc-review-section">
             <!-- Zahlungsmethode -->
-            <div class="wmc-section">
+            <div class="wmc-review-section">
                 <h3>Zahlungsmethode</h3>
                 <div id="payment" class="woocommerce-checkout-payment">
-                    <?php if (WC()->cart->needs_payment()) : ?>
-                        <ul class="wc_payment_methods payment_methods methods">
-                            <?php
-                            if (!empty($available_gateways)) {
-                                foreach ($available_gateways as $gateway) {
-                                    wc_get_template('checkout/payment-method.php', array('gateway' => $gateway));
-                                }
-                            } else {
-                                echo '<li class="woocommerce-notice woocommerce-notice--info woocommerce-info">' . apply_filters('woocommerce_no_available_payment_methods_message', WC()->customer->get_billing_country() ? __('Sorry, it seems that there are no available payment methods for your state. Please contact us if you require assistance or wish to make alternate arrangements.', 'woocommerce') : __('Please fill in your details above to see available payment methods.', 'woocommerce')) . '</li>';
+                    <?php
+                    if (WC()->cart->needs_payment()) {
+                        $available_gateways = WC()->payment_gateways->get_available_payment_gateways();
+                        if (!empty($available_gateways)) {
+                            foreach ($available_gateways as $gateway) {
+                                wc_get_template('checkout/payment-method.php', array('gateway' => $gateway));
                             }
-                            ?>
-                        </ul>
-                    <?php endif; ?>
+                        } else {
+                            echo '<p>' . apply_filters('woocommerce_no_available_payment_methods_message', WC()->customer->get_billing_country() ? __('Entschuldigung, es scheint, dass keine Zahlungsmethoden für Ihr Land verfügbar sind. Bitte kontaktieren Sie uns, wenn Sie Hilfe benötigen.', 'woocommerce') : __('Bitte füllen Sie zuerst Ihre Daten aus, um die verfügbaren Zahlungsmethoden zu sehen.', 'woocommerce')) . '</p>';
+                        }
+                    }
+                    ?>
                 </div>
             </div>
 
