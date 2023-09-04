@@ -1,28 +1,44 @@
+<?php
+
+/**
+ * Review order table
+ *
+ * This template can be overridden by copying it to yourtheme/woocommerce/checkout/review-order.php.
+ *
+ * HOWEVER, on occasion WooCommerce will need to update template files and you
+ * (the theme developer) will need to copy the new files to your theme to
+ * maintain compatibility. We try to do this as little as possible, but it does
+ * happen. When this occurs the version of the template file will be bumped and
+ * the readme will list any important changes.
+ *
+ * @see     https://docs.woocommerce.com/document/template-structure/
+ * @package WooCommerce/Templates
+ * @version 3.8.0
+ */
+
+defined('ABSPATH') || exit;
+?>
+
 <!-- Step 1: Adressdaten -->
-<div id="step1" class="step1-form-container">
-    <h2>Wohin sollen wir dein Paket schicken?</h2>
-    <div class="step1-form-box">
-        <?php do_action('woocommerce_checkout_billing'); ?>
-        <?php do_action('woocommerce_checkout_shipping'); ?>
-        <button id="goToStep2" class="wmc-next-step">Weiter zu Zahlungsdienst</button>
-    </div>
+<div id="step1">
+    <?php do_action('woocommerce_checkout_billing'); ?>
+    <?php do_action('woocommerce_checkout_shipping'); ?>
+    <button id="goToStep2">Weiter zu Zahlungsdienst</button>
 </div>
 
 <!-- Step 2: Zahlungsdienst -->
-<div id="step2" class="step2-payment" style="display: none;">
-    <h2>Zahlung</h2>
-    <p>Bitte wählen Sie Ihre bevorzugte Zahlungsmethode aus:</p>
+<div id="step2" style="display: none;">
     <div class="checkout-step" id="payment-only">
         <?php do_action('woocommerce_checkout_order_review'); ?>
     </div>
-    <button id="goToStep3" class="wmc-next-step">Weiter zur Übersicht</button>
+    <button id="goToStep3">Weiter zur Übersicht</button>
 </div>
 
+
 <!-- Step 3: Übersicht und Bestellung -->
-<div id="step3" class="wmc-step wmc-step3" style="display: none;">
-    <h2><?php _e('Schritt 3: Übersicht und Bestellung', 'woomulticheckout'); ?></h2>
+<div id="step3" style="display: none;">
     <?php do_action('woocommerce_checkout_order_review'); ?>
-    <button id="placeOrder" class="wmc-next-step">Bestellen</button>
+    <button id="placeOrder">Bestellen</button>
 </div>
 
 <!-- JavaScript for navigation -->
@@ -37,7 +53,8 @@
             $('#step2').hide();
             $('#step3').show();
         });
-
+    });
+    jQuery(document).ready(function($) {
         // Wenn eine Zahlungsmethode in Schritt 2 ausgewählt wird
         $('body').on('change', 'input[name="payment_method"]', function() {
             // Speichern Sie die ausgewählte Zahlungsmethode
@@ -71,28 +88,5 @@
     #payment-only .woocommerce-checkout-review-order-table,
     #payment-only .woocommerce-checkout-review-order {
         display: none;
-    }
-
-    .wmc-next-step {
-        background-color: #333;
-        color: #fff;
-        padding: 10px 15px;
-        border: none;
-        cursor: pointer;
-        margin-top: 20px;
-    }
-
-    .wmc-next-step:hover {
-        background-color: #555;
-    }
-
-    .step1-form-container,
-    .step2-payment,
-    .wmc-step {
-        font-size: 16px;
-        border: 1px solid #f5f5f5;
-        border-radius: 20px;
-        padding: 20px;
-        margin-bottom: 20px;
     }
 </style>
