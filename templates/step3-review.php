@@ -37,132 +37,62 @@ defined('ABSPATH') || exit;
 
 <!-- Step 3: Übersicht und Bestellung -->
 <div id="step3" style="display: none;">
-    <?php
-    global $woocommerce;
-    $checkout = WC()->checkout();
-    $cart = WC()->cart;
-    $applied_coupons = $cart->get_applied_coupons();
-    ?>
-
     <div class="wmc-review-container">
 
-        <!-- Linke Seite -->
-        <div class="wmc-review-left">
-
+        <!-- Linke Seite: Zahlungsmethode, Rabattcode, Adressen -->
+        <div class="wmc-review-left wmc-review-section">
             <!-- Zahlungsmethode -->
-            <div class="wmc-review-section">
+            <div class="wmc-section">
                 <h3>Zahlungsmethode</h3>
-                <p><?php echo WC()->session->get('chosen_payment_method'); ?></p>
+                <div id="payment" class="woocommerce-checkout-payment">
+                    <?php if (WC()->cart->needs_payment()) : ?>
+                        <ul class="wc_payment_methods payment_methods methods">
+                            <?php
+                            if (!empty($available_gateways)) {
+                                foreach ($available_gateways as $gateway) {
+                                    wc_get_template('checkout/payment-method.php', array('gateway' => $gateway));
+                                }
+                            }
+                            ?>
+                        </ul>
+                    <?php endif; ?>
+                </div>
             </div>
 
             <!-- Rabattcode -->
-            <div class="wmc-review-section">
+            <div class="wmc-section">
                 <h3>Rabattcode</h3>
-                <?php if (!empty($applied_coupons)) : ?>
-                    <p><?php echo esc_html($applied_coupons[0]); ?></p>
-                <?php endif; ?>
+                <?php
+                $checkout = WC()->checkout();
+                do_action('woocommerce_before_checkout_form', $checkout);
+                ?>
             </div>
 
             <!-- Lieferadresse -->
-            <div class="wmc-review-section">
+            <div class="wmc-section">
                 <h3>Lieferadresse</h3>
-                <address>
-                    <?php echo ($address = $checkout->get_value('shipping_address_1')) ? $address . '<br>' : ''; ?>
-                    <?php echo ($address_2 = $checkout->get_value('shipping_address_2')) ? $address_2 . '<br>' : ''; ?>
-                    <?php echo ($city = $checkout->get_value('shipping_city')) ? $city . '<br>' : ''; ?>
-                    <?php echo ($postcode = $checkout->get_value('shipping_postcode')) ? $postcode . '<br>' : ''; ?>
-                    <?php echo ($country = $checkout->get_value('shipping_country')) ? WC()->countries->countries[$country] : ''; ?>
-                </address>
+                <?php do_action('woocommerce_checkout_shipping'); ?>
             </div>
 
             <!-- Rechnungsadresse -->
-            <div class="wmc-review-section">
+            <div class="wmc-section">
                 <h3>Rechnungsadresse</h3>
-                <address>
-                    <?php echo ($address = $checkout->get_value('billing_address_1')) ? $address . '<br>' : ''; ?>
-                    <?php echo ($address_2 = $checkout->get_value('billing_address_2')) ? $address_2 . '<br>' : ''; ?>
-                    <?php echo ($city = $checkout->get_value('billing_city')) ? $city . '<br>' : ''; ?>
-                    <?php echo ($postcode = $checkout->get_value('billing_postcode')) ? $postcode . '<br>' : ''; ?>
-                    <?php echo ($country = $checkout->get_value('billing_country')) ? WC()->countries->countries[$country] : ''; ?>
-                </address>
-            </div>
-
-        </div>
-
-        <!-- Rechte Seite -->
-        <div class="wmc-review-right">
-
-            <!-- Warenkorb -->
-            <div class="wmc-review-section">
-                <h3>Warenkorb</h3>
-
-
-                <?php echo do_shortcode('[woocommerce_cart]'); ?>
-                <!-- Display the shortcode -->
-                <div class="wmc-shortcode">
-                    <?php echo do_shortcode('[elementor-template id="34712"]'); ?>
-                </div>
-                <!-- Rechnungsdetails -->
-                <h3>Rechnungsdetails</h3>
-                <table class="shop_table woocommerce-checkout-review-order-table">
-                    <tbody>
-                        <tr class="cart-subtotal">
-                            <th>Zwischensumme</th>
-                            <td><?php wc_cart_totals_subtotal_html(); ?></td>
-                        </tr>
-
-                        <?php foreach (WC()->cart->get_coupons() as $code => $coupon) : ?>
-                            <tr class="cart-discount coupon-<?php echo esc_attr(sanitize_title($code)); ?>">
-                                <th><?php wc_cart_totals_coupon_label($coupon); ?></th>
-                                <td><?php wc_cart_totals_coupon_html($coupon); ?></td>
-                            </tr>
-                        <?php endforeach; ?>
-
-                        <?php if (WC()->cart->needs_shipping() && WC()->cart->show_shipping()) : ?>
-                            <?php do_action('woocommerce_review_order_before_shipping'); ?>
-                            <?php wc_cart_totals_shipping_html(); ?>
-                            <?php do_action('woocommerce_review_order_after_shipping'); ?>
-                        <?php endif; ?>
-
-                        <?php foreach (WC()->cart->get_fees() as $fee) : ?>
-                            <tr class="fee">
-                                <th><?php echo esc_html($fee->name); ?></th>
-                                <td><?php wc_cart_totals_fee_html($fee); ?></td>
-                            </tr>
-                        <?php endforeach; ?>
-
-                        <?php if (wc_tax_enabled() && !WC()->cart->display_prices_including_tax()) :
-                            $taxable_address = WC()->customer->get_taxable_address();
-                            $estimated_text  = WC()->customer->is_customer_outside_base() && !WC()->customer->has_calculated_shipping()
-                                ? sprintf(' <small>(%s)</small>', __('estimated for %s', 'woocommerce'))
-                                : '';
-
-                            if ('itemized' === get_option('woocommerce_tax_total_display')) :
-                                foreach (WC()->cart->get_tax_totals() as $code => $tax) : ?>
-                                    <tr class="tax-rate tax-rate-<?php echo sanitize_title($code); ?>">
-                                        <th><?php echo esc_html($tax->label) . $estimated_text; ?></th>
-                                        <td><?php echo wp_kses_post($tax->formatted_amount); ?></td>
-                                    </tr>
-                                <?php endforeach;
-                            else :
-                                ?>
-                                <tr class="tax-total">
-                                    <th><?php echo esc_html(WC()->countries->tax_or_vat()) . $estimated_text; ?></th>
-                                    <td><?php wc_cart_totals_taxes_total_html(); ?></td>
-                                </tr>
-                            <?php endif; ?>
-                        <?php endif; ?>
-
-                        <tr class="order-total">
-                            <th>Gesamtbetrag</th>
-                            <td><?php wc_cart_totals_order_total_html(); ?></td>
-                        </tr>
-                    </tbody>
-                </table>
+                <?php do_action('woocommerce_checkout_billing'); ?>
             </div>
         </div>
 
+        <!-- Rechte Seite: Warenkorb -->
+        <div class="wmc-review-right wmc-review-section">
+            <h3>Warenkorb</h3>
+            <?php do_action('woocommerce_checkout_before_order_review'); ?>
+            <?php do_action('woocommerce_checkout_order_review'); ?>
+        </div>
+
+        <!-- Clear float -->
+        <div style="clear: both;"></div>
     </div>
+
+    <button id="placeOrder">Bestellen</button>
 </div>
 <!-- Styling -->
 <style>
