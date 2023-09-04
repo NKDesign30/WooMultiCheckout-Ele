@@ -1,24 +1,28 @@
-<div class="wmc-step wmc-step3">
-    <h2><?php _e('Schritt 1: Adressdaten', 'woomulticheckout'); ?></h2>
-    <div id="step1">
+<!-- Step 1: Adressdaten -->
+<div id="step1" class="step1-form-container">
+    <h2>Wohin sollen wir dein Paket schicken?</h2>
+    <div class="step1-form-box">
         <?php do_action('woocommerce_checkout_billing'); ?>
         <?php do_action('woocommerce_checkout_shipping'); ?>
-        <button id="goToStep2" class="wmc-next-step"><?php _e('Weiter zu Zahlungsdienst', 'woomulticheckout'); ?></button>
+        <button id="goToStep2" class="wmc-next-step">Weiter zu Zahlungsdienst</button>
     </div>
+</div>
 
-    <h2><?php _e('Schritt 2: Zahlungsdienst', 'woomulticheckout'); ?></h2>
-    <div id="step2" style="display: none;">
-        <div class="checkout-step" id="payment-only">
-            <?php do_action('woocommerce_checkout_order_review'); ?>
-        </div>
-        <button id="goToStep3" class="wmc-next-step"><?php _e('Weiter zur Übersicht', 'woomulticheckout'); ?></button>
-    </div>
-
-    <h2><?php _e('Schritt 3: Übersicht und Bestellung', 'woomulticheckout'); ?></h2>
-    <div id="step3" style="display: none;">
+<!-- Step 2: Zahlungsdienst -->
+<div id="step2" class="step2-payment" style="display: none;">
+    <h2>Zahlung</h2>
+    <p>Bitte wählen Sie Ihre bevorzugte Zahlungsmethode aus:</p>
+    <div class="checkout-step" id="payment-only">
         <?php do_action('woocommerce_checkout_order_review'); ?>
-        <button id="placeOrder" class="wmc-next-step"><?php _e('Bestellen', 'woomulticheckout'); ?></button>
     </div>
+    <button id="goToStep3" class="wmc-next-step">Weiter zur Übersicht</button>
+</div>
+
+<!-- Step 3: Übersicht und Bestellung -->
+<div id="step3" class="wmc-step wmc-step3" style="display: none;">
+    <h2><?php _e('Schritt 3: Übersicht und Bestellung', 'woomulticheckout'); ?></h2>
+    <?php do_action('woocommerce_checkout_order_review'); ?>
+    <button id="placeOrder" class="wmc-next-step">Bestellen</button>
 </div>
 
 <!-- JavaScript for navigation -->
@@ -80,5 +84,15 @@
 
     .wmc-next-step:hover {
         background-color: #555;
+    }
+
+    .step1-form-container,
+    .step2-payment,
+    .wmc-step {
+        font-size: 16px;
+        border: 1px solid #f5f5f5;
+        border-radius: 20px;
+        padding: 20px;
+        margin-bottom: 20px;
     }
 </style>
